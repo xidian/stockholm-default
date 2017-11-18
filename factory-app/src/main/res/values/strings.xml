@@ -1,0 +1,81 @@
+<resources>
+    <string name="app_name">工厂测试</string>
+
+    <string name="home_summary">
+        测试项目\n
+        1. 线控和拉绳\n
+        2. 显示屏\n
+        3. 传感器\n
+        4. Wi-Fi\n
+        5. 蓝牙\n
+        6. 声音\n
+    </string>
+    <string name="home_tip">点击[线控下键]开始测试</string>
+    <string name="skip">长按[线控中键]跳转到下一项测试</string>
+    <string name="ok">PASS</string>
+    <string name="fail">FAIL</string>
+    <string name="next">点击\"线控下键\"下一步</string>
+    <string name="previous">点击\"线控上键\"上一步</string>
+    <string name="pass_tip">长按\"线控中键\"记录Pass</string>
+    <string name="step_1">1/7</string>
+    <string name="step_2">2/7</string>
+    <string name="step_3">3/7</string>
+    <string name="step_4">4/7</string>
+    <string name="step_5">5/7</string>
+    <string name="step_6">6/7</string>
+    <string name="step_7">7/7</string>
+
+    <string name="line_test">线控测试</string>
+    <string name="line_up_btn">点击[线控上键]</string>
+    <string name="line_down_btn">点击[线控下键]</string>
+    <string name="line_center_btn">点击[线控中键]</string>
+    <string name="line_drag">请拉[拉绳]3次</string>
+    <string name="line_over">拉绳测试结束</string>
+
+    <string name="screen_test">屏幕测试</string>
+    <string name="screen_tips">点击[线控下键]切换</string>
+    <string name="screen_over">屏幕测试结束\n</string>
+
+    <string name="sensor_light_test">传感器测试</string>
+    <string name="sensor_light_value">光线读数 %f</string>
+    <string name="sensor_temperature_value">温度读数 %f</string>
+    <string name="sensor_humiture_value">湿度读数 %f</string>
+    <string name="sensor_over">3秒后跳转到下一个测试</string>
+
+    <string name="wifi_test">Wi-Fi(蓝牙)测试</string>
+    <string name="wifi_title">Wi-Fi搜索结果</string>
+    <string name="wifi_over">测试通过</string>
+    <string name="wifi_fail">测试失败</string>
+
+    <string name="ble_test">蓝牙测试</string>
+    <string name="ble_title">蓝牙搜索结果</string>
+    <string name="ble_fail">没有搜索到任何蓝牙设备</string>
+    <string name="ble_over">扫描结束</string>
+
+    <string name="speaker_test">声音测试</string>
+    <string name="speaker_tip">点击\"线控中键\"播放或暂停</string>
+    <string name="speaker_tip2">长按\"线控上键或下键\"调节系统音量\n点击\"线控上键或下键\"切换左右声道</string>
+    <string name="speaker_left_test">点击\"线控上键\"测试左声道</string>
+    <string name="speaker_right_test">点击\"线控下键\"测试右声道</string>
+    <string name="speaker_playing">音频播放中</string>
+    <string name="speaker_stop">音频已停止播放</string>
+    <string name="speaker_left_volume">左声道</string>
+    <string name="speaker_right_volume">右声道</string>
+    <string name="speaker_both_volume">双声道</string>
+
+    <string name="mic_test">麦克风测试</string>
+    <string name="mic_test_start">点击\"线控下键\"开始录音并回放</string>
+    <string name="mic_error_no_record">没有录音</string>
+    <string name="mic_state_playing">正在播放录音</string>
+    <string name="mic_state_pause">暂停播放录音</string>
+    <string name="mic_state_stop">播放录音结束</string>
+    <string name="mic_state_record_start">正在录音</string>
+    <string name="mic_state_record_stop">正在回放, 长按\"线控中键\"记录Pass</string>
+
+    <string name="uuid_test">序列号匹配</string>
+    <string name="uuid_test_tip">长按\"线控中键\"记录Pass\n下拉\"拉绳\"记录Fail</string>
+
+    <string name="over">测试完成</string>
+    <string name="over_tip">3秒后自动关机\n</string>
+
+</resources>

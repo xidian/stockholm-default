@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">绑定</string>
+
+    <string name="bind_mode">联网模式</string>
+    <string name="bind_mode_enter">已进入联网模式</string>
+    <string name="connect_success">手机与设备连接成功!</string>
+    <string name="bluetooth_connect">蓝牙已连接</string>
+    <string name="connect_ing">Wi-Fi连接中...</string>
+    <string name="connect_finish">设备联网成功</string>
+    <string name="connect_fail">设备联网失败</string>
+
+    <string name="info_check_phone">请在手机上按照提示继续操作</string>
+    <string name="info_check_wifi">请检查Wi-Fi名称和密码，并在手机上重新操作</string>
+
+    <string name="ble_uuid">00008912-0000-1000-8000-00805f9b34fb</string>
+    <string name="service_uuid">0000F000-0000-1000-8000-00805F9B34FB</string>
+    <string name="characteristic_uuid">0000F001-0000-1000-8000-00805F9B34FB"</string>
+    <string name="notify_descriptor_uuid">00002903-0000-1000-8000-00805F9B34FB</string>
+
+</resources>

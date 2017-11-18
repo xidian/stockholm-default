@@ -1,0 +1,74 @@
+project.ext.set('androidLoggingLog4j', 'de.mindpipe.android:android-logging-log4j:1.0.3')
+
+project.ext.set('blockcanaryDebug', 'com.github.markzhai:blockcanary-android:1.5.0')
+project.ext.set('blockcanaryRelease', 'com.github.markzhai:blockcanary-no-op:1.5.0')
+project.ext.set('blurry', 'jp.wasabeef:blurry:2.1.1')
+project.ext.set('buglyCrashReport', 'com.tencent.bugly:crashreport:latest.release')
+project.ext.set('buglyNativeCrashReport', 'com.tencent.bugly:nativecrashreport:latest.release')
+project.ext.set('butterKnife', 'com.jakewharton:butterknife:8.4.0')
+project.ext.set('butterKnifeCompile', 'com.jakewharton:butterknife-compiler:8.4.0')
+
+project.ext.set('circleImageView', 'de.hdodenhof:circleimageview:2.1.0')
+project.ext.set('circleLayout', 'io.github.francoiscampbell:circlelayout:0.3.0')
+
+project.ext.set('daggerCompiler', 'com.google.dagger:dagger-compiler:2.5')
+project.ext.set('dagger', 'com.google.dagger:dagger:2.5')
+project.ext.set('dbflowCompiler', 'com.github.Raizlabs.DBFlow:dbflow-processor:4.0.4')
+project.ext.set('dbflow', 'com.github.Raizlabs.DBFlow:dbflow:4.0.4')
+project.ext.set('dbflowCore', 'com.github.Raizlabs.DBFlow:dbflow-core:4.0.4')
+project.ext.set('debugDb', 'com.amitshekhar.android:debug-db:1.0.1')
+
+project.ext.set('faImageView', 'com.github.xinyer:FAImageView:1.0.5')
+project.ext.set('fontLoader', 'net.kianoni:fontloader:0.3.0')
+project.ext.set('filedownloader', 'com.liulishuo.filedownloader:library:1.4.1')
+
+project.ext.set('gson', 'com.google.code.gson:gson:2.7')
+project.ext.set('glide', 'com.github.bumptech.glide:glide:3.7.0')
+
+project.ext.set('jackson', 'com.fasterxml.jackson.core:jackson-databind:2.7.2')
+project.ext.set('jodaTime', 'joda-time:joda-time:2.9.7')
+
+project.ext.set('leakcanaryDebug', 'com.squareup.leakcanary:leakcanary-android:1.5')
+project.ext.set('leakcanaryRelease', 'com.squareup.leakcanary:leakcanary-android-no-op:1.5')
+project.ext.set('leakcanaryTest', 'com.squareup.leakcanary:leakcanary-android-no-op:1.5')
+project.ext.set('leonids', 'com.plattysoft.leonids:LeonidsLib:1.3.2')
+project.ext.set('log4j', 'log4j:log4j:1.2.17')
+project.ext.set('logInterceptor', 'com.squareup.okhttp3:logging-interceptor:+')
+
+project.ext.set('multiDex', 'com.android.support:multidex:1.0.1')
+
+project.ext.set('okhttp', 'com.squareup.okhttp3:okhttp:3.4.2')
+project.ext.set('okio', 'com.squareup.okio:okio:1.11.0')
+
+project.ext.set('pageIndicator', 'com.romandanylyk:pageindicatorview:0.1.1')
+project.ext.set('picasso', 'com.squareup.picasso:picasso:2.5.2')
+
+project.ext.set('qiniu', 'com.qiniu:qiniu-android-sdk:7.3.+')
+
+project.ext.set('retrofit2', 'com.squareup.retrofit2:retrofit:2.1.0')
+project.ext.set('retrofit2ConverterGson', 'com.squareup.retrofit2:converter-gson:2.1.0')
+project.ext.set('retrofit2AdapterRxjava', 'com.squareup.retrofit2:adapter-rxjava:2.1.0')
+project.ext.set('rxandroid', 'io.reactivex:rxandroid:1.2.1')
+project.ext.set('rxjava', 'io.reactivex:rxjava:1.1.6')
+
+project.ext.set('stetho', 'com.facebook.stetho:stetho:1.4.1')
+project.ext.set('stethoOkhttp', 'com.facebook.stetho:stetho-okhttp3:1.4.1')
+project.ext.set('storebox', 'net.orange-box.storebox:storebox-lib:1.4.0')
+project.ext.set('stockholmApi', 'com.github.xidian:stockholm-api:0.6.17')
+
+project.ext.set('trueTime', 'com.github.instacart.truetime-android:library-extension-rx:2.1')
+
+project.ext.set('umeng', 'com.umeng.analytics:analytics:latest.integration')
+
+project.ext.set('websocket', 'org.java-websocket:Java-WebSocket:1.3.0')
+
+project.ext.set('xlog', 'com.elvishew:xlog:1.3.0')
+
+//test
+project.ext.set('junit', 'junit:junit:4.12')
+project.ext.set('mockito', 'org.mockito:mockito-core:1.9.5')
+project.ext.set('hamcrest', 'org.hamcrest:hamcrest-all:1.3')
+project.ext.set('powermockApiMockito', 'org.powermock:powermock-api-mockito:1.6.4')
+project.ext.set('powermockModuleJunit4', 'org.powermock:powermock-module-junit4:1.6.4')
+project.ext.set('powermockClassloadingXstream', 'org.powermock:powermock-classloading-xstream:1.6.4')
+project.ext.set('robolectric', 'org.robolectric:robolectric:3.0')

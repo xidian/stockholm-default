@@ -1,0 +1,99 @@
+apply plugin: 'com.android.application'
+apply from: '../config/quality.gradle'
+
+def version = "0.9"
+
+static def buildTime() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmm')
+    return formattedDate
+}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
+    defaultConfig {
+        applicationId "com.stockholm.fota"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "${version}-${buildTime()}"
+
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            outputFileName = 'fota-' + variant.buildType.name + '.apk'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    signingConfigs {
+        myConfig {
+            storeFile file("stockholm.release.jks")
+            storePassword "MeowMeow233"
+            keyAlias "meow"
+            keyPassword "meowmeow233"
+        }
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField "int", "ENV_VALUE", "1"
+            resValue("string", "PORT_NUMBER", "8088")
+        }
+        stag {
+            buildConfigField "int", "ENV_VALUE", "2"
+            resValue("string", "PORT_NUMBER", "8088")
+            debuggable true
+            signingConfig signingConfigs.myConfig
+        }
+        release {
+            buildConfigField "int", "ENV_VALUE", "3"
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.myConfig
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+
+    compile 'com.github.xinyer:jummo-s-lib:v0.1.3'
+    annotationProcessor project.butterKnifeCompile
+    annotationProcessor project.daggerCompiler
+    compile project.butterKnife
+    compile project.dagger
+    compile project.gson
+    compile project.rxandroid
+    compile project.rxjava
+    debugCompile project.leakcanaryDebug
+    releaseCompile project.leakcanaryRelease
+    stagCompile project.leakcanaryRelease
+    testCompile project.leakcanaryTest
+    testCompile project.junit
+    debugCompile project.debugDb
+    stagCompile project.debugDb
+    compile project.buglyCrashReport
+    compile project.buglyNativeCrashReport
+    compile 'com.adups.iot:iot_libs:1.2.2'
+    compile project.qiniu
+}

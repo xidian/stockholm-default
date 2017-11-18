@@ -1,0 +1,7 @@
+include ':bind-app',
+        ':business-app',
+        ':display-app',
+        ':factory-app',
+        ':fota-app',
+        ':speech-app',
+        ':stable-app'

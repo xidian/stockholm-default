@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/black">
+
+    <TextView
+        android:id="@+id/tv_wifi_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:textSize="64sp"
+        android:text="@string/wifi_test"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:textSize="32sp"
+        android:text="@string/skip"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tv_wifi_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_wifi_test"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="300dp"
+        android:text="@string/wifi_title"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_wifi"
+        android:layout_width="400dp"
+        android:layout_height="500dp"
+        android:layout_below="@+id/tv_wifi_title"
+        android:layout_marginStart="300dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="100dp">
+    </android.support.v7.widget.RecyclerView>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:text="@string/step_4"
+        android:textSize="32sp"/>
+
+    <TextView
+        android:id="@+id/tv_countdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textSize="300sp"
+        android:textColor="@color/countdown"
+        tools:text="1"/>
+
+
+</RelativeLayout>

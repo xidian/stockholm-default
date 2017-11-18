@@ -1,0 +1,76 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.stockholm.fota"
+    android:sharedUserId="android.uid.system">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <application
+        android:name=".FotaApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="fota_configuration_product_id"
+            android:value="string/1505940411" />
+        <meta-data
+            android:name="fota_configuration_product_secret"
+            android:value="string/fce7cd6f2b554136b5a9a3d25f4bc011" />
+
+        <activity
+            android:name=".ota.MainActivity"
+            android:launchMode="singleTask"
+            android:stateNotNeeded="true"
+            android:theme="@style/BaseTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service android:name="com.adups.mqtt_libs.mqtt_service.MqttService" />
+        <service android:name="com.adups.iot_libs.service.OtaService" />
+        <service android:name="com.adups.iot_libs.service.JobSchedulerService" />
+        <service android:name=".ota.FotaService" />
+        <service android:name=".ota.UpdateService" />
+
+        <receiver android:name="com.adups.iot_libs.receiver.UpgradeReceiver">
+            <intent-filter android:priority="2147483647">
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".NetStateReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".BindReceiver">
+            <intent-filter>
+                <action android:name="com.stockholm.action.BIND_SUCCESS" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".push.PushMessageService"/>
+
+        <service android:name=".log.MLogService" />
+
+        <receiver android:name=".push.PushReceiver">
+            <intent-filter>
+                <action android:name="com.stockholm.meow.push.broadcast.action"/>
+            </intent-filter>
+        </receiver>
+
+    </application>
+</manifest>

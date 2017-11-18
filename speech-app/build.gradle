@@ -1,0 +1,110 @@
+apply plugin: 'com.android.application'
+apply from: '../config/quality.gradle'
+
+def version = "0.9"
+
+static def buildTime() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmm')
+    return formattedDate
+}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
+    defaultConfig {
+        applicationId "com.stockholm.speech"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "${version}-${buildTime()}"
+
+        ndk {
+            abiFilters 'armeabi-v7a', 'armeabi' , 'x86', 'x86_64'
+        }
+
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            if (variant.buildType.name != "debug") {
+                outputFileName = 'speech-' + defaultConfig.versionName + '-' + variant.buildType.name + '.apk'
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    sourceSets {
+        main() {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    signingConfigs {
+        myConfig {
+            storeFile file("stockholm.release.jks")
+            storePassword "MeowMeow233"
+            keyAlias "meow"
+            keyPassword "meowmeow233"
+        }
+    }
+
+    buildTypes {
+        debug {
+            resValue("string", "PORT_NUMBER", "8088")
+        }
+        release {
+            debuggable true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.myConfig
+        }
+        stag {
+            resValue("string", "PORT_NUMBER", "8088")
+            debuggable true
+            signingConfig signingConfigs.myConfig
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile 'com.github.xinyer:jummo-s-lib:v0.1.3'
+    annotationProcessor project.butterKnifeCompile
+    annotationProcessor project.daggerCompiler
+    annotationProcessor project.dbflowCompiler
+    compile project.butterKnife
+    compile project.dagger
+    compile project.dbflow
+    compile project.dbflowCore
+    compile project.gson
+    compile project.rxandroid
+    compile project.rxjava
+    debugCompile project.leakcanaryDebug
+    releaseCompile project.leakcanaryRelease
+    stagCompile project.leakcanaryRelease
+    testCompile project.leakcanaryTest
+    testCompile project.junit
+    debugCompile project.debugDb
+    stagCompile project.debugDb
+    compile project.buglyCrashReport
+    compile project.buglyNativeCrashReport
+}

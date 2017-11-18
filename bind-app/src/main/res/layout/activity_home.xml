@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBlack"
+    tools:context="com.stockholm.bind.view.HomeActivity">
+
+    <ImageView
+        android:id="@+id/iv_qrcode"
+        android:layout_width="@dimen/root_view_width"
+        android:layout_height="@dimen/root_view_height"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_bind"
+        tools:visibility="visible"/>
+
+    <RelativeLayout
+        android:id="@+id/layout_bind"
+        android:layout_width="@dimen/root_view_width"
+        android:layout_height="@dimen/root_view_height"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_bind"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        tools:visibility="invisible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="90dp"
+            android:text="@string/bind_mode"
+            android:textColor="#666"
+            android:textSize="30sp"/>
+
+        <ImageView
+            android:id="@+id/iv_center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/phone_remind"/>
+
+        <TextView
+            android:id="@+id/tv_bind_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_center"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="38dp"
+            android:textColor="#fa6432"
+            android:textSize="28sp"
+            android:visibility="visible"
+            tools:text="@string/connect_success"/>
+
+        <TextView
+            android:id="@+id/tv_bind_info"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_bind_status"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/info_check_phone"
+            android:textColor="#999"
+            android:textSize="22sp"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>
