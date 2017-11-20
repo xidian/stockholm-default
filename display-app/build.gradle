@@ -85,7 +85,7 @@ dependencies {
     })
     testCompile project.junit
 
-    compile 'com.github.xinyer:jummo-s-lib:v0.1.3'
+    compile 'com.github.xidian:jummo-s-lib:v0.1.3'
     annotationProcessor project.butterKnifeCompile
     annotationProcessor project.daggerCompiler
     compile project.butterKnife
