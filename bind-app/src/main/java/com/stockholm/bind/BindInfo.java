@@ -4,10 +4,10 @@ import com.google.gson.Gson;
 
 public class BindInfo {
 
-    private String n;//name
-    private String p;//password
-    private String t;//token
-    private boolean b;//bind device
+    private String n; //name
+    private String p; //password
+    private String t; //token
+    private boolean b; //bind device
 
     public BindInfo(String wifiName, String wifiPassword, String accessToken, boolean bindDevice) {
         this.n = wifiName;

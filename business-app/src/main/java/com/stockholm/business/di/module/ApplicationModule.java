@@ -6,7 +6,6 @@ import android.content.Context;
 import com.stockholm.api.business.BusinessService;
 import com.stockholm.business.BusinessApplication;
 import com.stockholm.common.api.BaseUrl;
-import com.stockholm.common.api.EnvProvider;
 import com.stockholm.common.api.ServiceFactory;
 import com.stockholm.common.utils.WeakHandler;
 
