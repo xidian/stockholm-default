@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.stockholm.api.base.BaseResponse;
 import com.stockholm.api.bind.BindService;
 import com.stockholm.api.bind.DeviceBindStateBean;
@@ -130,9 +131,18 @@ public class BindPresenter extends BasePresenter<HomeView> {
                     getMvpView().onUpdateView(HomeView.VIEW_CONNECT_NETWORK);
                     WifiMessage responseMsg = new WifiMessage(true, WifiMessage.CMD_DEVICE_RESPONSE, "ok");
                     wiFiHelper.getIoSession().write(responseMsg).addListener(ioFuture -> {
-                        StockholmLogger.d(TAG.AP, "onMessageReceive: write success");
-                        BindInfo bindInfo = BindInfo.toBindInfo(msg.getData());
-                        connectNetwork(bindInfo, true);
+                        try {
+                            StockholmLogger.d(TAG.AP, "onMessageReceive: write success");
+                            BindInfo bindInfo = BindInfo.toBindInfo(msg.getData());
+                            connectNetwork(bindInfo, true);
+                        } catch (JsonSyntaxException e) {
+                            e.printStackTrace();
+                            StockholmLogger.d(TAG.AP, "json parse error.");
+                            handleFail(true);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            handleFail(true);
+                        }
                     });
                 }
             }
@@ -171,8 +181,17 @@ public class BindPresenter extends BasePresenter<HomeView> {
                 BluetoothMessage message = new Gson().fromJson(msg, BluetoothMessage.class);
                 if (message != null && message.getCmd() == BluetoothMessage.CMD_SEND_BIND) {
                     getMvpView().onUpdateView(HomeView.VIEW_CONNECT_NETWORK);
-                    BindInfo bindInfo = BindInfo.toBindInfo(message.getContent());
-                    connectNetwork(bindInfo, false);
+                    try {
+                        BindInfo bindInfo = BindInfo.toBindInfo(message.getContent());
+                        connectNetwork(bindInfo, false);
+                    } catch (JsonSyntaxException e) {
+                        e.printStackTrace();
+                        StockholmLogger.d(TAG.BLE, "json parse error.");
+                        handleFail(false);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        handleFail(false);
+                    }
                 }
             }
 
@@ -212,9 +231,18 @@ public class BindPresenter extends BasePresenter<HomeView> {
                 StockholmLogger.d(TAG.BLE_IOS, "message read:" + msg);
                 if (!TextUtils.isEmpty(msg)) {
                     getMvpView().onUpdateView(HomeView.VIEW_CONNECT_NETWORK);
-                    BindInfo bindInfo = BindInfo.toBindInfo(msg);
-                    iosStartConnect = true;
-                    connectNetwork(bindInfo, false);
+                    try {
+                        BindInfo bindInfo = BindInfo.toBindInfo(msg);
+                        iosStartConnect = true;
+                        connectNetwork(bindInfo, false);
+                    } catch (JsonSyntaxException e) {
+                        StockholmLogger.e(TAG.BLE_IOS, "string length is out of limit.");
+                        e.printStackTrace();
+                        handleFail(false);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        handleFail(false);
+                    }
                 }
             }
         });
