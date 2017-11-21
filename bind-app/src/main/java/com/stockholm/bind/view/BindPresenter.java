@@ -247,7 +247,7 @@ public class BindPresenter extends BasePresenter<HomeView> {
 
     private void connectNetwork(final BindInfo bindInfo, final boolean restart) {
         openWiFi();
-        StockholmLogger.d(TAG.BIND, "connectNetwork name: " + bindInfo.getWifiName() + ", pwd: " + bindInfo.getWifiPassword());
+        StockholmLogger.d(TAG.BIND, "connectNetwork name: " + bindInfo.getN() + ", pwd: " + bindInfo.getP());
         CountDownTimer countDown = new CountDownTimer(55000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -261,10 +261,10 @@ public class BindPresenter extends BasePresenter<HomeView> {
             }
         };
         countDown.start();
-        connector.connect(bindInfo.getWifiName(), bindInfo.getWifiPassword(), new Connector.Listener() {
+        connector.connect(bindInfo.getN(), bindInfo.getP(), new Connector.Listener() {
             @Override
             public void onNotFountHotspot() {
-                Log.d(TAG.BIND, "not found hotspot." + bindInfo.getWifiName());
+                Log.d(TAG.BIND, "not found hotspot." + bindInfo.getN());
                 handleFail(restart);
                 countDown.cancel();
             }
@@ -321,8 +321,8 @@ public class BindPresenter extends BasePresenter<HomeView> {
         }
         boolean available = NetworkTestUtil.isNetworkAvailable(context);
         if (available) {
-            if (bindInfo.isBindDevice()) {
-                bind(bindInfo.getAccessToken(), restart);
+            if (bindInfo.isB()) {
+                bind(bindInfo.getT(), restart);
             } else {
                 reportWifiConnect();
             }

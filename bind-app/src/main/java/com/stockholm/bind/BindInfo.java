@@ -4,32 +4,32 @@ import com.google.gson.Gson;
 
 public class BindInfo {
 
-    private String wifiName;
-    private String wifiPassword;
-    private String accessToken;
-    private boolean bindDevice;
+    private String n;//name
+    private String p;//password
+    private String t;//token
+    private boolean b;//bind device
 
     public BindInfo(String wifiName, String wifiPassword, String accessToken, boolean bindDevice) {
-        this.wifiName = wifiName;
-        this.wifiPassword = wifiPassword;
-        this.accessToken = accessToken;
-        this.bindDevice = bindDevice;
+        this.n = wifiName;
+        this.p = wifiPassword;
+        this.t = accessToken;
+        this.b = bindDevice;
     }
 
-    public String getWifiName() {
-        return wifiName;
+    public String getN() {
+        return n;
     }
 
-    public String getWifiPassword() {
-        return wifiPassword;
+    public String getP() {
+        return p;
     }
 
-    public String getAccessToken() {
-        return accessToken;
+    public String getT() {
+        return t;
     }
 
-    public boolean isBindDevice() {
-        return bindDevice;
+    public boolean isB() {
+        return b;
     }
 
     @Override
