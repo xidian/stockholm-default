@@ -90,6 +90,7 @@ dependencies {
     compile project.glide
     compile project.rxandroid
     compile project.rxjava
+    compile project.stockholmApi
     debugCompile project.debugDb
     stagCompile project.debugDb
     debugCompile project.leakcanaryDebug

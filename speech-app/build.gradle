@@ -98,6 +98,7 @@ dependencies {
     compile project.gson
     compile project.rxandroid
     compile project.rxjava
+    compile project.stockholmApi
     debugCompile project.leakcanaryDebug
     releaseCompile project.leakcanaryRelease
     stagCompile project.leakcanaryRelease

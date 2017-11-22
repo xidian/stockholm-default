@@ -96,4 +96,5 @@ dependencies {
     compile project.buglyNativeCrashReport
     compile 'com.adups.iot:iot_libs:1.2.2'
     compile project.qiniu
+    compile project.stockholmApi
 }

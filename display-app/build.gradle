@@ -93,5 +93,5 @@ dependencies {
     compile project.glide
     compile project.rxandroid
     compile project.rxjava
-
+    compile project.stockholmApi
 }

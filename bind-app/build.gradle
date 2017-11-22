@@ -98,6 +98,7 @@ dependencies {
     compile project.picasso
     compile project.rxandroid
     compile project.rxjava
+    compile project.stockholmApi
     compile 'com.github.xinyer:android-wifi-connector:v0.6'
 
     testCompile project.junit
