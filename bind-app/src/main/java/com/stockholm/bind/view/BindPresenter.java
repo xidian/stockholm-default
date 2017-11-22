@@ -286,6 +286,7 @@ public class BindPresenter extends BasePresenter<HomeView> {
             public void onFinish() {
                 Log.d(TAG.BIND, "connect network count down finish.");
                 handleFail(restart);
+                connector.stop();
             }
         };
         countDown.start();
