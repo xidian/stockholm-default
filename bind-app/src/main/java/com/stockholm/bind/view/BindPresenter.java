@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.support.annotation.RequiresApi;
@@ -32,11 +33,11 @@ import com.stockholm.bind.wifi.WiFiHelper;
 import com.stockholm.bind.wifi.WifiMessage;
 import com.stockholm.common.IntentExtraKey;
 import com.stockholm.common.JPushOrder;
-import com.stockholm.common.utils.NetworkTestUtil;
 import com.stockholm.common.utils.ProviderUtil;
 import com.stockholm.common.utils.StockholmLogger;
 import com.stockholm.common.view.BasePresenter;
 import com.wx.lib.Connector;
+import com.wx.lib.Ping;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -48,7 +49,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class BindPresenter extends BasePresenter<HomeView> {
-
     private static final String ACTION_GET_SN = "com.stockholm.action.serialnumber.request";
     private static final String ACTION_RECEIVE_SN = "com.stockholm.action.serialnumber.response";
     private static final String KEY_SN = "com.stockholm.key.serialnumber";
@@ -63,21 +63,16 @@ public class BindPresenter extends BasePresenter<HomeView> {
     private SoundManager soundManager;
     private SnReceiver snReceiver;
     private KeyTrigger keyTrigger;
-
     private int connectType;
     private boolean iosStartConnect = false;
     private long iosConnectTime = 0;
     private String pcbSN = DEFAULT_PCB_SN;
 
     @Inject
-    public BindPresenter(Context context,
-                         BindService bindService,
-                         PushService pushService,
-                         BluetoothHelper bluetoothHelper,
-                         WiFiHelper wiFiHelper,
-                         BluetoothHelperForIOS bluetoothHelperForIOS,
-                         SoundManager soundManager,
-                         KeyTrigger keyTrigger) {
+    public BindPresenter(Context context, BindService bindService,
+                         PushService pushService, BluetoothHelper bluetoothHelper,
+                         WiFiHelper wiFiHelper, BluetoothHelperForIOS bluetoothHelperForIOS,
+                         SoundManager soundManager, KeyTrigger keyTrigger) {
         this.context = context;
         this.bindService = bindService;
         this.pushService = pushService;
@@ -314,7 +309,7 @@ public class BindPresenter extends BasePresenter<HomeView> {
             public void onConnectResult(boolean result) {
                 countDown.cancel();
                 if (result) {
-                    reqServer(bindInfo, restart, true);
+                    reqServer(bindInfo, restart);
                 } else {
                     handleFail(restart);
                 }
@@ -329,36 +324,10 @@ public class BindPresenter extends BasePresenter<HomeView> {
         soundManager.play(SoundManager.SOUND_BIND_FAIL);
     }
 
-    private void reqServer(BindInfo bindInfo, boolean restart, boolean delay) {
-        StockholmLogger.d(TAG.BIND, bindInfo.toString() + "-" + restart + "-" + delay);
-        if (delay) {
-            int delayReqServer = 20_000;
-            int delayTime = 0;
-            while (delayTime <= delayReqServer) {
-                boolean available = NetworkTestUtil.isNetworkAvailable(context);
-                if (available) {
-                    break;
-                } else {
-                    delayTime += 2_000;
-                    try {
-                        StockholmLogger.d(TAG.BIND, "delay to req bind.");
-                        Thread.sleep(2_000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-        boolean available = NetworkTestUtil.isNetworkAvailable(context);
-        if (available) {
-            if (bindInfo.isB()) {
-                bind(bindInfo.getT(), restart);
-            } else {
-                reportWifiConnect();
-            }
-        } else {
-            bindFail(new Exception("network is not available."), restart);
-        }
+    private void reqServer(BindInfo bindInfo, boolean restart) {
+        StockholmLogger.d(TAG.BIND, bindInfo.toString() + "-" + restart);
+        RequestServer requestServer = new RequestServer(bindInfo, restart);
+        requestServer.execute("api.meowtechnology.com");
     }
 
     private void bind(final String accessToken, final boolean restart) {
@@ -396,7 +365,6 @@ public class BindPresenter extends BasePresenter<HomeView> {
         handleFail(restart);
     }
 
-    // TODO: 13/07/2017 restart
     private void reportWifiConnect() {
         pushService.sendPush(new CommonPushReq(new PushMessage(JPushOrder.REPORT_WIFI_CONNECT)))
                 .subscribeOn(Schedulers.io())
@@ -477,10 +445,54 @@ public class BindPresenter extends BasePresenter<HomeView> {
     }
 
     class SnReceiver extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             pcbSN = intent.getStringExtra(KEY_SN);
+        }
+    }
+
+    class RequestServer extends AsyncTask<String, Void, Boolean> {
+        private BindInfo bindInfo;
+        private boolean restart;
+
+        RequestServer(BindInfo bindInfo, boolean restart) {
+            this.bindInfo = bindInfo;
+            this.restart = restart;
+        }
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            Ping ping = new Ping();
+            int delayTime = 0;
+            while (delayTime <= 5) {
+                boolean available = ping.ping(strings[0]);
+                if (available) {
+                    return true;
+                } else {
+                    delayTime ++;
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    StockholmLogger.d(TAG.BIND, "delay to req bind." + delayTime);
+                }
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean b) {
+            super.onPostExecute(b);
+            if (b) {
+                if (bindInfo.isB()) {
+                    bind(bindInfo.getT(), restart);
+                } else {
+                    reportWifiConnect();
+                }
+            } else {
+                bindFail(new Exception("network is not available."), restart);
+            }
         }
     }
 

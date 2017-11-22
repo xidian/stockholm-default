@@ -99,7 +99,7 @@ dependencies {
     compile project.rxjava
     compile project.stockholmApi
     compile project.commonLib
-    compile 'com.github.xinyer:android-wifi-connector:v0.6'
+    compile 'com.github.xinyer:android-wifi-connector:v0.6.1'
 
     testCompile project.junit
 
