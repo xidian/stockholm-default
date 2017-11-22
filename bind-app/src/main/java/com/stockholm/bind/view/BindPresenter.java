@@ -323,6 +323,7 @@ public class BindPresenter extends BasePresenter<HomeView> {
     }
 
     private void handleFail(boolean restart) {
+        iosStartConnect = false;
         tellMobileConnectFail();
         getMvpView().onBindFail(restart);
         soundManager.play(SoundManager.SOUND_BIND_FAIL);
