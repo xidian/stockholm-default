@@ -469,7 +469,7 @@ public class BindPresenter extends BasePresenter<HomeView> {
                 if (available) {
                     return true;
                 } else {
-                    delayTime ++;
+                    delayTime++;
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
