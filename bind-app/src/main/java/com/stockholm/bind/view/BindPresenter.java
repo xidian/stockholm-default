@@ -232,8 +232,8 @@ public class BindPresenter extends BasePresenter<HomeView> {
                 if (!TextUtils.isEmpty(msg)) {
                     getMvpView().onUpdateView(HomeView.VIEW_CONNECT_NETWORK);
                     try {
-                        BindInfo bindInfo = BindInfo.toBindInfo(msg);
                         iosStartConnect = true;
+                        BindInfo bindInfo = BindInfo.toBindInfo(msg);
                         connectNetwork(bindInfo, false);
                     } catch (JsonSyntaxException e) {
                         StockholmLogger.e(TAG.BLE_IOS, "string length is out of limit.");

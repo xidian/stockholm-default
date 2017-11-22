@@ -200,11 +200,13 @@ public class HomeActivity extends ReleaseBaseActivity implements HomeView {
         switch (state) {
             case VIEW_BIND_START:
                 changeCenterImage(R.drawable.phone_remind);
-                changeBindStatusText(R.string.info_check_phone);
+                changeBindStatusText(R.string.bind_mode_enter);
+                tvBindInfo.setText(R.string.info_check_phone);
                 break;
             case VIEW_PAIR_SUCCESS:
                 changeCenterImage(R.drawable.phone_connect);
                 changeBindStatusText(R.string.bluetooth_connect);
+                tvBindInfo.setText(R.string.info_check_phone);
                 break;
             case VIEW_CONNECT_NETWORK:
                 runOnUiThread(() -> {
