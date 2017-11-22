@@ -68,12 +68,12 @@ dependencies {
     })
     testCompile project.junit
 
-    compile 'com.github.xidian:jummo-s-lib:v0.1.3'
     annotationProcessor project.butterKnifeCompile
     annotationProcessor project.daggerCompiler
     compile project.butterKnife
     compile project.dagger
     compile project.stockholmApi
+    compile project.commonLib
 
     compile 'com.daimajia.easing:library:2.0@aar'
     compile 'com.daimajia.androidanimations:library:2.3@aar'

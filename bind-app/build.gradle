@@ -90,7 +90,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    compile 'com.github.xidian:jummo-s-lib:v0.1.4'
     annotationProcessor project.butterKnifeCompile
     annotationProcessor project.daggerCompiler
     compile project.butterKnife
@@ -99,6 +98,7 @@ dependencies {
     compile project.rxandroid
     compile project.rxjava
     compile project.stockholmApi
+    compile project.commonLib
     compile 'com.github.xinyer:android-wifi-connector:v0.6'
 
     testCompile project.junit
