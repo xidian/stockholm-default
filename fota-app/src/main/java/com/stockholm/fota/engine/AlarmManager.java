@@ -4,29 +4,28 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
-import com.adups.trace.Trace;
+import com.stockholm.common.utils.StockholmLogger;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-public class AlarmManager {
+public final class AlarmManager {
 
     public static final String TAG = "AlarmManager:";
     private static AlarmManager info = null;
 
-    public static final int INIT_TIME = 10;               // unit : min
-    private Context mContext;
     public PendingIntent operation;
+    private Context mContext;
+
+    private AlarmManager(Context ctx) {
+        mContext = ctx;
+    }
 
     public static AlarmManager getInstance(Context context) {
         if (info == null) {
             info = new AlarmManager(context);
         }
         return info;
-    }
-
-    private AlarmManager(Context ctx) {
-        mContext = ctx;
     }
 
     //repeating alarm
@@ -36,8 +35,8 @@ public class AlarmManager {
         am.cancel(operation);
         am.setInexactRepeating(android.app.AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + repeatTime, repeatTime, operation);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-        Trace.d(TAG, "serAlarm enter, current time is: " + format.format(System.currentTimeMillis()));
-        Trace.d(TAG, "setRepeatingAlarm() first time is:" + format.format(System.currentTimeMillis() + repeatTime));
+        StockholmLogger.d(TAG, "serAlarm enter, current time is: " + format.format(System.currentTimeMillis()));
+        StockholmLogger.d(TAG, "setRepeatingAlarm() first time is:" + format.format(System.currentTimeMillis() + repeatTime));
         return am;
     }
 

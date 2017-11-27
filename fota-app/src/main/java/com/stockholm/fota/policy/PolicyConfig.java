@@ -1,9 +1,8 @@
 package com.stockholm.fota.policy;
 
-public class PolicyConfig {
-    public boolean checkCycle = true;
-
+public final class PolicyConfig {
     private static PolicyConfig instance;
+    public boolean checkCycle = true;
 
     private PolicyConfig() {
     }

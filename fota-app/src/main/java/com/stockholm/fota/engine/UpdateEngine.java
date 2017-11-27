@@ -12,10 +12,10 @@ import com.adups.iot_libs.utils.SPFTool;
 import com.stockholm.common.utils.StockholmLogger;
 import com.stockholm.fota.policy.PolicyManager;
 
-public class UpdateEngine {
+public final class UpdateEngine {
+    public static PolicyManager policyInter = new PolicyManager();
     private static final String TAG = "UpdateEngine";
 
-    public static PolicyManager PolicyInter = new PolicyManager();
     private static UpdateEngine mInstance;
 
     //同时接收多个OTA任务但只执行一个
@@ -52,6 +52,40 @@ public class UpdateEngine {
         this.updateCallback = updateCallback;
     }
 
+    public void saveCheckInfo() {
+
+        //检测周期策略
+        int checkCycle = policyInter.getCheckCycle();
+        StockholmLogger.d(TAG, "fota checkCycle got: " + checkCycle);
+        if (checkCycle > 0) {
+            //开启周期检测任务(优先以后台下发的检测周期为周期)
+            SPFTool.putLong(AlarmService.ALARM_CHECK_VERSION_CYCLE, checkCycle);
+            AlarmService.startAlarmService(context);
+        }
+
+    }
+
+    //异步改同步
+    private void lock() {
+        synchronized (lock) {
+            try {
+                lock.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void lockNotify() {
+        synchronized (lock) {
+            lock.notify();
+        }
+    }
+
+    public interface UpdateCallback {
+        void onCheckUpdateFail();
+    }
+
     private class SilenceTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -62,7 +96,7 @@ public class UpdateEngine {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            OTATask();
+            otaTask();
             lock();
             return null;
         }
@@ -73,7 +107,7 @@ public class UpdateEngine {
             super.onPostExecute(aVoid);
         }
 
-        private void OTATask() {
+        private void otaTask() {
             OtaAgentPolicy.checkVersion(new ICheckVersionCallback() {
                 @Override
                 public void onCheckSuccess(VersionInfo versionInfo) {
@@ -126,40 +160,6 @@ public class UpdateEngine {
             StockholmLogger.d(TAG, "reboot to upgrade");
             OtaAgentPolicy.rebootUpgrade((i, s) -> lockNotify());
         }
-    }
-
-    public void saveCheckInfo() {
-
-        //检测周期策略
-        int checkCycle = PolicyInter.get_check_cycle();
-        StockholmLogger.d(TAG, "fota checkCycle got: " + checkCycle);
-        if (checkCycle > 0) {
-            //开启周期检测任务(优先以后台下发的检测周期为周期)
-            SPFTool.putLong(AlarmService.ALARM_CHECK_VERSION_CYCLE, checkCycle);
-            AlarmService.startAlarmService(context);
-        }
-
-    }
-
-    //异步改同步
-    private void lock() {
-        synchronized (lock) {
-            try {
-                lock.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void lockNotify() {
-        synchronized (lock) {
-            lock.notify();
-        }
-    }
-
-    public interface UpdateCallback {
-        void onCheckUpdateFail();
     }
 
 }

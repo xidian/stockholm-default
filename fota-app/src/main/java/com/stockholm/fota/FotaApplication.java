@@ -1,18 +1,10 @@
 package com.stockholm.fota;
 
-import android.app.Application;
-
-import com.adups.iot_libs.MqttAgentPolicy;
-import com.adups.iot_libs.OtaAgentPolicy;
-import com.adups.iot_libs.inter.IRegisterListener;
-import com.adups.iot_libs.security.FotaException;
 import com.facebook.stetho.Stetho;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.squareup.leakcanary.LeakCanary;
 import com.stockholm.common.BaseApplication;
-import com.stockholm.common.utils.DeviceUUIDFactory;
-import com.stockholm.common.utils.OsUtils;
 import com.stockholm.common.utils.PreferenceFactory;
 import com.stockholm.common.utils.StockholmLogger;
 import com.stockholm.fota.di.component.ApplicationComponent;
@@ -26,8 +18,6 @@ import javax.inject.Inject;
 
 
 public class FotaApplication extends BaseApplication {
-
-    private static final String FOTA_UPDATE_PATH = "/cache/update.zip";
 
     @Inject
     PreferenceFactory preferenceFactory;

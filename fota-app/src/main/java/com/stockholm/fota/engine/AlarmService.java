@@ -17,16 +17,16 @@ import javax.inject.Inject;
 
 public class AlarmService extends Service {
 
-    private static final String TAG = "AlarmService";
     public static final String CHECK_CYCLE = "checkCycle";
     public static final String ACTION_CHECK_VERSION = "action_check_version";
     public static final String ALARM_CHECK_VERSION_CYCLE = "alarm_check_version_cycle";
     public static final int DEFAULT_ALARM_CHECK_VERSION_CYCLE = 15;
-
-    private CheckVersionReceiver checkVersionReceiver;
+    private static final String TAG = "AlarmService";
 
     @Inject
     FotaManager fotaManager;
+
+    private CheckVersionReceiver checkVersionReceiver;
 
     public static void startAlarmService(Context context) {
         long cycle = SPFTool.getLong(AlarmService.ALARM_CHECK_VERSION_CYCLE, AlarmService.DEFAULT_ALARM_CHECK_VERSION_CYCLE);
@@ -82,6 +82,8 @@ public class AlarmService extends Service {
                     StockholmLogger.d(TAG, "Time up! Check Fota");
                     fotaManager.checkUpdate();
                     fotaManager.reconnectOta();
+                    break;
+                default:
                     break;
             }
         }

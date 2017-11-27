@@ -10,7 +10,7 @@ public class PolicyManager {
     public PolicyManager() {
     }
 
-    public int get_check_cycle() {
+    public int getCheckCycle() {
         if (!PolicyConfig.getInstance().checkCycle) return -1;
         PolicyMapInfo cycleInfo = null;
         try {
