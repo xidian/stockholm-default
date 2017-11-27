@@ -14,6 +14,7 @@ import com.stockholm.common.utils.StockholmLogger;
 import com.stockholm.fota.FotaApplication;
 import com.stockholm.fota.di.component.ApplicationComponent;
 import com.stockholm.fota.di.component.DaggerServiceComponent;
+import com.stockholm.fota.engine.UpdateEngine;
 
 import javax.inject.Inject;
 
@@ -55,11 +56,13 @@ public class FotaService extends Service {
     }
 
     private void init() {
+        StockholmLogger.d(TAG, "FotaService INIT");
         initFotaReceiver();
         fotaPresenter.init();
     }
 
     private void initFotaReceiver() {
+        StockholmLogger.d(TAG, "FotaReceiver Register");
         OTABroadcastReceiver otaBroadcastReceiver = new OTABroadcastReceiver();
         LocalBroadcastManager.getInstance(this.getApplicationContext())
                 .registerReceiver(otaBroadcastReceiver, new IntentFilter(BroadcastConsts.ACTION_FOTA_NOTIFY));
@@ -68,13 +71,12 @@ public class FotaService extends Service {
 
     public class OTABroadcastReceiver extends BroadcastReceiver {
         @Override
-        public void onReceive(Context arg0, Intent intent) {
+        public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             switch (action) {
                 case BroadcastConsts.ACTION_FOTA_NOTIFY:
-                    String body = intent.getStringExtra(BroadcastConsts.KEY_FOTA_NOTIFY);
-                    StockholmLogger.d(TAG, "onReceive() notify:" + body);
-                    startService(new Intent(FotaService.this, UpdateService.class));
+                    StockholmLogger.d(TAG, "FOTA  notify received");
+                    UpdateEngine.getInstance(context).silenceUpdateExecute();
                     break;
                 default:
                     break;

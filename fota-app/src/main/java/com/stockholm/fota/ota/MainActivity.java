@@ -5,7 +5,7 @@ import android.content.Intent;
 import com.stockholm.common.bus.RxEventBus;
 import com.stockholm.common.view.ReleaseBaseActivity;
 import com.stockholm.fota.FotaApplication;
-import com.stockholm.fota.TestOtaEvent;
+import com.stockholm.fota.event.TestOtaEvent;
 import com.stockholm.fota.di.component.ApplicationComponent;
 import com.stockholm.fota.di.component.DaggerActivityComponent;
 

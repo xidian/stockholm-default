@@ -1,10 +1,10 @@
 package com.stockholm.fota.di.component;
 
 
-import com.stockholm.fota.ota.FotaService;
 import com.stockholm.fota.di.Scopes;
 import com.stockholm.fota.di.module.ServiceModule;
-import com.stockholm.fota.ota.UpdateService;
+import com.stockholm.fota.engine.AlarmService;
+import com.stockholm.fota.ota.FotaService;
 
 import dagger.Component;
 
@@ -13,5 +13,5 @@ import dagger.Component;
 public interface ServiceComponent {
     void inject(FotaService service);
 
-    void inject(UpdateService service);
+    void inject(AlarmService service);
 }

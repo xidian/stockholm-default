@@ -1,5 +1,7 @@
 package com.stockholm.fota;
 
+import android.app.Application;
+
 import com.adups.iot_libs.MqttAgentPolicy;
 import com.adups.iot_libs.OtaAgentPolicy;
 import com.adups.iot_libs.inter.IRegisterListener;
@@ -40,7 +42,6 @@ public class FotaApplication extends BaseApplication {
         LeakCanary.install(this);
         Bugly.init(this, "4a11ae4c63", false);
         CrashReport.setIsDevelopmentDevice(this, BuildConfig.DEBUG);
-        initFota();
         MLog.init(this);
     }
 
@@ -55,41 +56,4 @@ public class FotaApplication extends BaseApplication {
         return this.applicationComponent;
     }
 
-    private void initFota() {
-        OtaAgentPolicy.showTrace(true);
-        OtaAgentPolicy.setUpdatePath(FOTA_UPDATE_PATH);
-        DeviceUUIDFactory deviceUUIDFactory = new DeviceUUIDFactory();
-        try {
-            OtaAgentPolicy.initFota(this.getApplicationContext());
-            OtaAgentPolicy.setDeviceInfo(deviceUUIDFactory.getDeviceId());
-            fotaRegister();
-        } catch (FotaException e) {
-            e.printStackTrace();
-            StockholmLogger.e("FotaApplication", "init fota error" + e.getMessage());
-        }
-    }
-
-    private void fotaRegister() {
-        if (!OsUtils.isNetworkConnected(this)) {
-            StockholmLogger.d("FotaApplication", "start ota service but no network");
-            return;
-        }
-        FotaPreference fotaPreference = preferenceFactory.create(FotaPreference.class);
-        OtaAgentPolicy.register(new IRegisterListener() {
-            @Override
-            public void onSuccess() {
-                StockholmLogger.d("FotaApplication", "注册设备成功");
-                fotaPreference.setFotaRegistered(true);
-            }
-
-            @Override
-            public void onFailed(int i) {
-                StockholmLogger.d("FotaApplication", "注册设备失败");
-                fotaPreference.setFotaRegistered(false);
-            }
-        });
-        if (!MqttAgentPolicy.isConnected()) {
-            MqttAgentPolicy.connect();
-        }
-    }
 }

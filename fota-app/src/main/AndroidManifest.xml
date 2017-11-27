@@ -41,7 +41,6 @@
         <service android:name="com.adups.iot_libs.service.OtaService" />
         <service android:name="com.adups.iot_libs.service.JobSchedulerService" />
         <service android:name=".ota.FotaService" />
-        <service android:name=".ota.UpdateService" />
 
         <receiver android:name="com.adups.iot_libs.receiver.UpgradeReceiver">
             <intent-filter android:priority="2147483647">
@@ -50,27 +49,26 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".NetStateReceiver">
+        <receiver android:name=".receiver.FotaReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
-
-        <receiver android:name=".BindReceiver">
-            <intent-filter>
                 <action android:name="com.stockholm.action.BIND_SUCCESS" />
             </intent-filter>
         </receiver>
 
-        <service android:name=".push.PushMessageService"/>
+        <receiver android:name=".push.PushReceiver">
+            <intent-filter>
+                <action android:name="com.stockholm.meow.push.broadcast.action" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".push.PushMessageService" />
+
+        <service android:name=".engine.AlarmService" />
 
         <service android:name=".log.MLogService" />
 
-        <receiver android:name=".push.PushReceiver">
-            <intent-filter>
-                <action android:name="com.stockholm.meow.push.broadcast.action"/>
-            </intent-filter>
-        </receiver>
+        <service android:name=".ota.FotaService" />
 
     </application>
 </manifest>
