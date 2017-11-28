@@ -17,7 +17,6 @@ import com.stockholm.common.utils.PreferenceFactory;
 import com.stockholm.common.utils.StockholmLogger;
 import com.stockholm.fota.FotaPreference;
 import com.stockholm.fota.engine.UpdateEngine;
-import com.stockholm.fota.policy.PolicyConfig;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -50,7 +49,6 @@ public class FotaManager {
     private void initFota() {
         StockholmLogger.d(TAG, "fota initing");
         try {
-            PolicyConfig.getInstance().requestCheckCycle(true);
             OtaAgentPolicy.showTrace(true);
             OtaAgentPolicy.setUpdatePath(FOTA_UPDATE_PATH);
             DeviceUUIDFactory deviceUUIDFactory = new DeviceUUIDFactory();
