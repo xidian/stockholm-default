@@ -10,6 +10,9 @@ import android.support.annotation.Nullable;
 
 import com.adups.iot_libs.utils.SPFTool;
 import com.stockholm.common.utils.StockholmLogger;
+import com.stockholm.fota.FotaApplication;
+import com.stockholm.fota.di.component.ApplicationComponent;
+import com.stockholm.fota.di.component.DaggerServiceComponent;
 import com.stockholm.fota.ota.FotaManager;
 
 import javax.inject.Inject;
@@ -55,6 +58,8 @@ public class AlarmService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        ApplicationComponent component = ((FotaApplication) getApplication()).getApplicationComponent();
+        DaggerServiceComponent.builder().applicationComponent(component).build().inject(this);
         checkVersionReceiver = new CheckVersionReceiver();
         AlarmService.this.registerReceiver(checkVersionReceiver, new IntentFilter(ACTION_CHECK_VERSION));
         StockholmLogger.d(TAG, "--onCreate--");
@@ -72,7 +77,6 @@ public class AlarmService extends Service {
     }
 
     public class CheckVersionReceiver extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
