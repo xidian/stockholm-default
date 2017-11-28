@@ -11,7 +11,6 @@ public class PolicyManager {
     }
 
     public int getCheckCycle() {
-        if (!PolicyConfig.getInstance().checkCycle) return -1;
         PolicyMapInfo cycleInfo = null;
         try {
             cycleInfo = VersionInfo.getInstance().policyHashMap.get(KEY_CHECK_CYCLE);
