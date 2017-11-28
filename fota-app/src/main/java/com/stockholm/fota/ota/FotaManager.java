@@ -19,8 +19,6 @@ import com.stockholm.fota.FotaPreference;
 import com.stockholm.fota.engine.UpdateEngine;
 import com.stockholm.fota.policy.PolicyConfig;
 
-import javax.inject.Inject;
-
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -29,23 +27,22 @@ public class FotaManager {
     private static final String TAG = "FotaManager";
     private static final String FOTA_UPDATE_PATH = "/cache/update.zip";
 
-    @Inject
-    Context context;
-    @Inject
-    RomService romService;
-    @Inject
-    PreferenceFactory preferenceFactory;
+    private Context context;
+    private RomService romService;
 
     private FotaPreference fotaPreference;
     private IStatusListener statusListener;
     private FotaManagerCallback fotaManagerCallback;
 
-    @Inject
-    public FotaManager() {
+    public FotaManager(Context context,
+                       RomService romService,
+                       PreferenceFactory preferenceFactory) {
+        this.context = context;
+        this.romService = romService;
+        this.fotaPreference = preferenceFactory.create(FotaPreference.class);
     }
 
     public void init() {
-        fotaPreference = preferenceFactory.create(FotaPreference.class);
         initFota();
         initMqttAgent();
     }
