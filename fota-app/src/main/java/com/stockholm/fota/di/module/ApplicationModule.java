@@ -8,9 +8,11 @@ import com.stockholm.common.api.BaseUrl;
 import com.stockholm.common.api.Env;
 import com.stockholm.common.api.EnvProvider;
 import com.stockholm.common.api.ServiceFactory;
+import com.stockholm.common.utils.PreferenceFactory;
 import com.stockholm.common.utils.WeakHandler;
 import com.stockholm.fota.BuildConfig;
 import com.stockholm.fota.FotaApplication;
+import com.stockholm.fota.ota.FotaManager;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -78,4 +80,11 @@ public class ApplicationModule {
         return factory.create(RomService.class);
     }
 
+    @Provides
+    @Singleton
+    public FotaManager provideFotaManager(Context context,
+                                          RomService romService,
+                                          PreferenceFactory preferenceFactory) {
+        return new FotaManager(context, romService, preferenceFactory);
+    }
 }

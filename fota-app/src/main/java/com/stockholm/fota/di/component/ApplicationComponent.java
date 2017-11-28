@@ -8,6 +8,7 @@ import com.stockholm.common.bus.RxEventBus;
 import com.stockholm.common.utils.PreferenceFactory;
 import com.stockholm.fota.FotaApplication;
 import com.stockholm.fota.di.module.ApplicationModule;
+import com.stockholm.fota.ota.FotaManager;
 
 import javax.inject.Singleton;
 
@@ -26,4 +27,6 @@ public interface ApplicationComponent {
     PreferenceFactory preferenceFactory();
 
     Context context();
+
+    FotaManager fotaManager();
 }
