@@ -26,8 +26,8 @@ public class FotaPresenter implements FotaManager.FotaManagerCallback, UpdateEng
     }
 
     public void init() {
-        fotaManager.setFotaManagerCallback(this);
         UpdateEngine.getInstance(context).setUpdateCallback(this);
+        fotaManager.setFotaManagerCallback(this);
         eventBus.subscribe(ReconnectOtaEvent.class, event -> fotaManager.reconnectOta());
         fotaManager.init();
     }

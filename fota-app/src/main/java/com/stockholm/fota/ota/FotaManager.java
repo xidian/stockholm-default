@@ -8,7 +8,6 @@ import com.adups.iot_libs.constant.Error;
 import com.adups.iot_libs.info.DeviceInfo;
 import com.adups.iot_libs.inter.IRegisterListener;
 import com.adups.iot_libs.inter.IStatusListener;
-import com.adups.iot_libs.security.FotaException;
 import com.stockholm.api.rom.RomInfoReq;
 import com.stockholm.api.rom.RomService;
 import com.stockholm.common.Constant;
@@ -53,15 +52,15 @@ public class FotaManager {
 
     private void initFota() {
         StockholmLogger.d(TAG, "fota initing");
-        PolicyConfig.getInstance().requestCheckCycle(true);
-        OtaAgentPolicy.showTrace(true);
-        OtaAgentPolicy.setUpdatePath(FOTA_UPDATE_PATH);
-        DeviceUUIDFactory deviceUUIDFactory = new DeviceUUIDFactory();
         try {
+            PolicyConfig.getInstance().requestCheckCycle(true);
+            OtaAgentPolicy.showTrace(true);
+            OtaAgentPolicy.setUpdatePath(FOTA_UPDATE_PATH);
+            DeviceUUIDFactory deviceUUIDFactory = new DeviceUUIDFactory();
             OtaAgentPolicy.initFota(context.getApplicationContext());
             OtaAgentPolicy.setDeviceInfo(deviceUUIDFactory.getDeviceId());
             fotaRegister();
-        } catch (FotaException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             StockholmLogger.e(TAG, "init fota error" + e.getMessage());
         }
@@ -89,9 +88,6 @@ public class FotaManager {
                 fotaManagerCallback.onRegisterFail();
             }
         });
-        if (!MqttAgentPolicy.isConnected()) {
-            MqttAgentPolicy.connect();
-        }
     }
 
     private void initMqttAgent() {
@@ -119,9 +115,14 @@ public class FotaManager {
             }
         };
         MqttAgentPolicy.registerStatusListener(statusListener);
-        if (MqttAgentPolicy.isConnected()) {
-            MqttAgentPolicy.connect();
+        try {
+            if (!MqttAgentPolicy.isConnected()) {
+                MqttAgentPolicy.connect();
+            }
+        } catch (Exception e) {
+            StockholmLogger.d(TAG, "MqttAgentPolicy connect error" + e.getMessage());
         }
+
     }
 
     public void reconnectOta() {

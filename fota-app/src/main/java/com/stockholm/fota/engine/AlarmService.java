@@ -9,7 +9,6 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.adups.iot_libs.utils.SPFTool;
-import com.adups.trace.Trace;
 import com.stockholm.common.utils.StockholmLogger;
 import com.stockholm.fota.ota.FotaManager;
 
@@ -58,13 +57,13 @@ public class AlarmService extends Service {
         super.onCreate();
         checkVersionReceiver = new CheckVersionReceiver();
         AlarmService.this.registerReceiver(checkVersionReceiver, new IntentFilter(ACTION_CHECK_VERSION));
-        Trace.d(TAG, "--onCreate--");
+        StockholmLogger.d(TAG, "--onCreate--");
     }
 
     @Override
     public void onDestroy() {
         AlarmService.this.unregisterReceiver(checkVersionReceiver);
-        Trace.d(TAG, "--onDestroy--");
+        StockholmLogger.d(TAG, "--onDestroy--");
         super.onDestroy();
     }
 
