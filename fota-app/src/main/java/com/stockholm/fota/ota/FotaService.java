@@ -33,9 +33,6 @@ public class FotaService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent == null) {
-            return START_STICKY_COMPATIBILITY;
-        }
         StockholmLogger.d(TAG, "FotaService onStartCommand");
         return START_STICKY_COMPATIBILITY;
     }
@@ -43,6 +40,7 @@ public class FotaService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        StockholmLogger.d(TAG, "FotaService onCreate");
         ApplicationComponent component = ((FotaApplication) getApplication()).getApplicationComponent();
         DaggerServiceComponent.builder().applicationComponent(component).build().inject(this);
         init();

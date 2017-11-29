@@ -26,27 +26,15 @@
             android:name="fota_configuration_product_secret"
             android:value="string/fce7cd6f2b554136b5a9a3d25f4bc011" />
 
-        <activity
-            android:name=".ota.MainActivity"
-            android:launchMode="singleTask"
-            android:stateNotNeeded="true"
-            android:theme="@style/BaseTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
         <service android:name="com.adups.mqtt_libs.mqtt_service.MqttService" />
         <service android:name="com.adups.iot_libs.service.OtaService" />
-        <service android:name="com.adups.iot_libs.service.JobSchedulerService" />
-        <service android:name=".ota.FotaService" />
+        <!--<service android:name="com.adups.iot_libs.service.JobSchedulerService" />-->
 
         <receiver android:name="com.adups.iot_libs.receiver.UpgradeReceiver">
-            <intent-filter android:priority="2147483647">
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
+        <intent-filter android:priority="2147483647">
+        <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+        <action android:name="android.intent.action.BOOT_COMPLETED" />
+        </intent-filter>
         </receiver>
 
         <receiver android:name=".receiver.FotaReceiver">
@@ -68,7 +56,10 @@
 
         <service android:name=".log.MLogService" />
 
-        <service android:name=".ota.FotaService" />
+        <service
+            android:name=".ota.FotaService"
+            android:enabled="true"
+            android:exported="true" />
 
     </application>
 </manifest>
