@@ -33,7 +33,7 @@ public final class AlarmManager {
         operation = PendingIntent.getBroadcast(mContext, 0, new Intent(action), 0);
         android.app.AlarmManager am = (android.app.AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         am.cancel(operation);
-        am.setWindow(android.app.AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + repeatTime, repeatTime, operation);
+        am.setExact(android.app.AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + repeatTime, operation);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
         StockholmLogger.d(TAG, "serAlarm enter, current time is: " + format.format(System.currentTimeMillis()));
         StockholmLogger.d(TAG, "setRepeatingAlarm() next time is:" + format.format(System.currentTimeMillis() + repeatTime));
