@@ -86,6 +86,10 @@ public class FotaManager {
     }
 
     private void initMqttAgent() {
+        if (!OsUtils.isNetworkConnected(context)) {
+            StockholmLogger.d(TAG, "connect mqtt but no network");
+            return;
+        }
         statusListener = new IStatusListener() {
             @Override
             public void onConnected() {
@@ -109,8 +113,8 @@ public class FotaManager {
                 StockholmLogger.d(TAG, "onError() error " + Error.getErrorMessage(i));
             }
         };
-        MqttAgentPolicy.registerStatusListener(statusListener);
         try {
+            MqttAgentPolicy.registerStatusListener(statusListener);
             if (!MqttAgentPolicy.isConnected()) {
                 MqttAgentPolicy.connect();
             }
@@ -125,10 +129,15 @@ public class FotaManager {
             StockholmLogger.d(TAG, "reconnectOta but no network");
             return;
         }
-        if (!MqttAgentPolicy.isConnected()) {
-            StockholmLogger.d(TAG, "reconnect Mqtt");
-            MqttAgentPolicy.connect();
+        try {
+            if (!MqttAgentPolicy.isConnected()) {
+                StockholmLogger.d(TAG, "reconnect Mqtt");
+                MqttAgentPolicy.connect();
+            }
+        } catch (Exception e) {
+            StockholmLogger.d(TAG, "MqttAgentPolicy reconnect error" + e.getMessage());
         }
+
     }
 
     public void checkUpdate() {

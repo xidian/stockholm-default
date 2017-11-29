@@ -94,7 +94,7 @@ dependencies {
     stagCompile project.debugDb
     compile project.buglyCrashReport
     compile project.buglyNativeCrashReport
-    compile 'com.adups.iot:iot_libs:1.2.4_360_test'
+    compile 'com.adups.iot:iot_libs:1.2.4'
     compile project.qiniu
     compile project.stockholmApi
 }

@@ -30,7 +30,7 @@ public class FotaApplication extends BaseApplication {
         FlowManager.init(new FlowConfig.Builder(this).build());
         Stetho.initializeWithDefaults(this);
         LeakCanary.install(this);
-        Bugly.init(this, "4a11ae4c63", false);
+        Bugly.init(this, "8c7c1ea02d", false);
         CrashReport.setIsDevelopmentDevice(this, BuildConfig.DEBUG);
         MLog.init(this);
     }
@@ -40,6 +40,11 @@ public class FotaApplication extends BaseApplication {
         applicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this)).build();
         applicationComponent.inject(this);
+    }
+
+    @Override
+    public String initUMengAppKey() {
+        return "5a1e1b13b27b0a544b000084";
     }
 
     public ApplicationComponent getApplicationComponent() {
