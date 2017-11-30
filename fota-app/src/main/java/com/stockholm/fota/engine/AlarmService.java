@@ -50,7 +50,7 @@ public class AlarmService extends Service {
         if (null != intent) {
             Long cycle = intent.getLongExtra(CHECK_CYCLE, -1);
             StockholmLogger.d(TAG, "onStartCommand() cycle:" + cycle);
-            startAlarm(cycle * 60 * 1000);
+            startAlarm(cycle * 60  * 1000);
         }
         return START_STICKY;
     }
