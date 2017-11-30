@@ -11,7 +11,6 @@ import com.adups.iot_libs.inter.IStatusListener;
 import com.stockholm.api.rom.RomInfoReq;
 import com.stockholm.api.rom.RomService;
 import com.stockholm.common.Constant;
-import com.stockholm.common.utils.DeviceUUIDFactory;
 import com.stockholm.common.utils.OsUtils;
 import com.stockholm.common.utils.PreferenceFactory;
 import com.stockholm.common.utils.StockholmLogger;
@@ -24,7 +23,6 @@ import rx.schedulers.Schedulers;
 public class FotaManager {
 
     private static final String TAG = "FotaManager";
-    private static final String FOTA_UPDATE_PATH = "/cache/update.zip";
 
     private Context context;
     private RomService romService;
@@ -49,11 +47,6 @@ public class FotaManager {
     private void initFota() {
         StockholmLogger.d(TAG, "fota initing");
         try {
-            OtaAgentPolicy.showTrace(true);
-            OtaAgentPolicy.setUpdatePath(FOTA_UPDATE_PATH);
-            DeviceUUIDFactory deviceUUIDFactory = new DeviceUUIDFactory();
-            OtaAgentPolicy.initFota(context.getApplicationContext());
-            OtaAgentPolicy.setDeviceInfo(deviceUUIDFactory.getDeviceId());
             fotaRegister();
         } catch (Exception e) {
             e.printStackTrace();

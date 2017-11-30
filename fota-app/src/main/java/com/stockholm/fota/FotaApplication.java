@@ -1,10 +1,13 @@
 package com.stockholm.fota;
 
+import com.adups.iot_libs.OtaAgentPolicy;
+import com.adups.iot_libs.security.FotaException;
 import com.facebook.stetho.Stetho;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.squareup.leakcanary.LeakCanary;
 import com.stockholm.common.BaseApplication;
+import com.stockholm.common.utils.DeviceUUIDFactory;
 import com.stockholm.common.utils.PreferenceFactory;
 import com.stockholm.common.utils.StockholmLogger;
 import com.stockholm.fota.di.component.ApplicationComponent;
@@ -18,6 +21,8 @@ import javax.inject.Inject;
 
 
 public class FotaApplication extends BaseApplication {
+
+    private static final String FOTA_UPDATE_PATH = "/cache/update.zip";
 
     @Inject
     PreferenceFactory preferenceFactory;
@@ -33,6 +38,7 @@ public class FotaApplication extends BaseApplication {
         Bugly.init(this, "8c7c1ea02d", false);
         CrashReport.setIsDevelopmentDevice(this, BuildConfig.DEBUG);
         MLog.init(this);
+        initFota();
     }
 
     @Override
@@ -49,6 +55,18 @@ public class FotaApplication extends BaseApplication {
 
     public ApplicationComponent getApplicationComponent() {
         return this.applicationComponent;
+    }
+
+    private void initFota() {
+        try {
+            OtaAgentPolicy.showTrace(true);
+            OtaAgentPolicy.setUpdatePath(FOTA_UPDATE_PATH);
+            DeviceUUIDFactory deviceUUIDFactory = new DeviceUUIDFactory();
+            OtaAgentPolicy.initFota(this.getApplicationContext());
+            OtaAgentPolicy.setDeviceInfo(deviceUUIDFactory.getDeviceId());
+        } catch (FotaException e) {
+            e.printStackTrace();
+        }
     }
 
 }
