@@ -148,6 +148,11 @@ public class HomeActivity extends ReleaseBaseActivity implements HomeView {
     }
 
     @Override
+    public void onReverseSwitchAppClick() {
+        // must have this function. Don't remove it.
+    }
+
+    @Override
     public void onControlOKClick() {
         super.onControlOKClick();
         if (isQRView) {
