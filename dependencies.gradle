@@ -55,7 +55,7 @@ project.ext.set('stetho', 'com.facebook.stetho:stetho:1.4.1')
 project.ext.set('stethoOkhttp', 'com.facebook.stetho:stetho-okhttp3:1.4.1')
 project.ext.set('storebox', 'net.orange-box.storebox:storebox-lib:1.4.0')
 project.ext.set('stockholmApi', 'com.github.xidian:stockholm-api:0.6.20')
-project.ext.set('commonLib', 'com.github.xidian:jummo-s-lib:v0.1.12')
+project.ext.set('commonLib', 'com.github.xidian:jummo-s-lib:v0.1.21')
 
 project.ext.set('trueTime', 'com.github.instacart.truetime-android:library-extension-rx:2.1')
 
