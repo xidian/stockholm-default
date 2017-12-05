@@ -8,6 +8,7 @@ public class BluetoothMessage {
     public static final int CMD_SEND_BIND = 0;
     public static final int CMD_CONNECT_FAIL = 1;
     public static final int CMD_CONNECT_OK = 2;
+    public static final int CMD_UUID = 3;
 
     private int cmd;
     private String content;
