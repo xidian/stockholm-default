@@ -59,8 +59,8 @@ public final class MLog {
 
     public static void init(Context context) {
         LogConfig config = new LogConfig.Builder()
-                .interval(6000_000)
-                .backupDays(15)
+                .interval(1800_000)
+                .backupDays(10)
                 .build();
         init(context, config);
     }
