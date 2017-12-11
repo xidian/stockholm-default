@@ -41,4 +41,5 @@
     <suppress checks="[a-zA-Z0-9]*" files="com.stockholm.weather.home.HomeActivity" />
     <suppress checks="[a-zA-Z0-9]*" files="com.youth.banner" />
     <suppress checks="[a-zA-Z0-9]*" files="com.stockholm.business.di.module.ApplicationModule" />
+    <suppress checks="[a-zA-Z0-9]*" files="com.stockholm.bind.view.BindPresenter" />
 </suppressions>
