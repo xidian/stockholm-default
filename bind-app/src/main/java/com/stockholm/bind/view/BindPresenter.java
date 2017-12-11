@@ -36,6 +36,7 @@ import com.stockholm.common.JPushOrder;
 import com.stockholm.common.utils.DeviceUUIDFactory;
 import com.stockholm.common.utils.ProviderUtil;
 import com.stockholm.common.utils.StockholmLogger;
+import com.stockholm.common.utils.WeakHandler;
 import com.stockholm.common.view.BasePresenter;
 import com.wx.lib.Connector;
 import com.wx.lib.Ping;
@@ -69,6 +70,14 @@ public class BindPresenter extends BasePresenter<HomeView> {
     private boolean iosStartConnect = false;
     private long iosConnectTime = 0;
     private String pcbSN = DEFAULT_PCB_SN;
+    private WeakHandler weakHandler = new WeakHandler(msg -> {
+        if (msg.what == 0) {
+            String uuid = Constant.MSG_IOS_UUID + deviceUUIDFactory.getDeviceId();
+            System.out.println("--send uuid to mobile--" + uuid);
+            bluetoothHelperIOS.sendMessage(uuid);
+        }
+        return false;
+    });
 
     @Inject
     public BindPresenter(Context context, BindService bindService,
@@ -234,6 +243,7 @@ public class BindPresenter extends BasePresenter<HomeView> {
                     getMvpView().onUpdateView(HomeView.VIEW_CONNECT_NETWORK);
                     try {
                         iosStartConnect = true;
+                        weakHandler.sendEmptyMessageDelayed(0, 3000);
                         BindInfo bindInfo = BindInfo.toBindInfo(msg);
                         connectNetwork(bindInfo, false);
                     } catch (JsonSyntaxException e) {
@@ -401,19 +411,19 @@ public class BindPresenter extends BasePresenter<HomeView> {
         }
     }
 
-    public void getSn(Context context) {
+    private void getSn(Context context) {
         Intent intent = new Intent(ACTION_GET_SN);
         context.sendBroadcast(intent);
     }
 
-    public void registerSnReceiver(Context context) {
+    private void registerSnReceiver(Context context) {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_RECEIVE_SN);
         snReceiver = new SnReceiver();
         context.registerReceiver(snReceiver, intentFilter);
     }
 
-    public void unRegisterReceiver(Context context) {
+    private void unRegisterReceiver(Context context) {
         if (null != snReceiver) {
             context.unregisterReceiver(snReceiver);
         }
@@ -454,7 +464,7 @@ public class BindPresenter extends BasePresenter<HomeView> {
         }
     }
 
-    class RequestServer extends AsyncTask<String, Void, Boolean> {
+    static class RequestServer extends AsyncTask<String, Void, Boolean> {
         private BindInfo bindInfo;
         private boolean restart;
 

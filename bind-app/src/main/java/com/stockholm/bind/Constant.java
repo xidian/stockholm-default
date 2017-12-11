@@ -34,6 +34,7 @@ public final class Constant {
      */
     public static final String MSG_IOS_OK = "0";
     public static final String MSG_IOS_FAIL = "1";
+    public static final String MSG_IOS_UUID = "UUID@";
 
     private Constant() {
 
