@@ -464,7 +464,7 @@ public class BindPresenter extends BasePresenter<HomeView> {
         }
     }
 
-    static class RequestServer extends AsyncTask<String, Void, Boolean> {
+    class RequestServer extends AsyncTask<String, Void, Boolean> {
         private BindInfo bindInfo;
         private boolean restart;
 
