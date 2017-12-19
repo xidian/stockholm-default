@@ -33,8 +33,10 @@ import com.stockholm.bind.wifi.WiFiHelper;
 import com.stockholm.bind.wifi.WifiMessage;
 import com.stockholm.common.IntentExtraKey;
 import com.stockholm.common.JPushOrder;
+import com.stockholm.common.utils.DeviceUUIDFactory;
 import com.stockholm.common.utils.ProviderUtil;
 import com.stockholm.common.utils.StockholmLogger;
+import com.stockholm.common.utils.WeakHandler;
 import com.stockholm.common.view.BasePresenter;
 import com.wx.lib.Connector;
 import com.wx.lib.Ping;
@@ -63,16 +65,25 @@ public class BindPresenter extends BasePresenter<HomeView> {
     private SoundManager soundManager;
     private SnReceiver snReceiver;
     private KeyTrigger keyTrigger;
+    private DeviceUUIDFactory deviceUUIDFactory;
     private int connectType;
     private boolean iosStartConnect = false;
     private long iosConnectTime = 0;
     private String pcbSN = DEFAULT_PCB_SN;
+    private WeakHandler weakHandler = new WeakHandler(msg -> {
+        if (msg.what == 0) {
+            String uuid = Constant.MSG_IOS_UUID + deviceUUIDFactory.getDeviceId();
+            System.out.println("--send uuid to mobile--" + uuid);
+            bluetoothHelperIOS.sendMessage(uuid);
+        }
+        return false;
+    });
 
     @Inject
     public BindPresenter(Context context, BindService bindService,
                          PushService pushService, BluetoothHelper bluetoothHelper,
                          WiFiHelper wiFiHelper, BluetoothHelperForIOS bluetoothHelperForIOS,
-                         SoundManager soundManager, KeyTrigger keyTrigger) {
+                         SoundManager soundManager, KeyTrigger keyTrigger, DeviceUUIDFactory deviceUUIDFactory) {
         this.context = context;
         this.bindService = bindService;
         this.pushService = pushService;
@@ -81,6 +92,7 @@ public class BindPresenter extends BasePresenter<HomeView> {
         this.bluetoothHelperIOS = bluetoothHelperForIOS;
         this.soundManager = soundManager;
         this.keyTrigger = keyTrigger;
+        this.deviceUUIDFactory = deviceUUIDFactory;
         this.connector = new Connector(context);
     }
 
@@ -124,7 +136,7 @@ public class BindPresenter extends BasePresenter<HomeView> {
                 WifiMessage msg = WifiMessage.get(message);
                 if (msg != null && msg.getCommand() == WifiMessage.CMD_MOBILE_SEND) {
                     getMvpView().onUpdateView(HomeView.VIEW_CONNECT_NETWORK);
-                    WifiMessage responseMsg = new WifiMessage(true, WifiMessage.CMD_DEVICE_RESPONSE, "ok");
+                    WifiMessage responseMsg = new WifiMessage(true, WifiMessage.CMD_DEVICE_RESPONSE, deviceUUIDFactory.getDeviceId());
                     wiFiHelper.getIoSession().write(responseMsg).addListener(ioFuture -> {
                         try {
                             StockholmLogger.d(TAG.AP, "onMessageReceive: write success");
@@ -177,6 +189,9 @@ public class BindPresenter extends BasePresenter<HomeView> {
                 if (message != null && message.getCmd() == BluetoothMessage.CMD_SEND_BIND) {
                     getMvpView().onUpdateView(HomeView.VIEW_CONNECT_NETWORK);
                     try {
+                        BluetoothMessage uuidMsg = new BluetoothMessage(BluetoothMessage.CMD_UUID, deviceUUIDFactory.getDeviceId());
+                        bluetoothHelper.sendMessage(uuidMsg.toString());
+
                         BindInfo bindInfo = BindInfo.toBindInfo(message.getContent());
                         connectNetwork(bindInfo, false);
                     } catch (JsonSyntaxException e) {
@@ -228,6 +243,7 @@ public class BindPresenter extends BasePresenter<HomeView> {
                     getMvpView().onUpdateView(HomeView.VIEW_CONNECT_NETWORK);
                     try {
                         iosStartConnect = true;
+                        weakHandler.sendEmptyMessageDelayed(0, 3000);
                         BindInfo bindInfo = BindInfo.toBindInfo(msg);
                         connectNetwork(bindInfo, false);
                     } catch (JsonSyntaxException e) {
@@ -308,11 +324,8 @@ public class BindPresenter extends BasePresenter<HomeView> {
             @Override
             public void onConnectResult(boolean result) {
                 countDown.cancel();
-                if (result) {
-                    reqServer(bindInfo, restart);
-                } else {
-                    handleFail(restart);
-                }
+                if (result) reqServer(bindInfo, restart);
+                else handleFail(restart);
             }
         });
     }
@@ -398,19 +411,19 @@ public class BindPresenter extends BasePresenter<HomeView> {
         }
     }
 
-    public void getSn(Context context) {
+    private void getSn(Context context) {
         Intent intent = new Intent(ACTION_GET_SN);
         context.sendBroadcast(intent);
     }
 
-    public void registerSnReceiver(Context context) {
+    private void registerSnReceiver(Context context) {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_RECEIVE_SN);
         snReceiver = new SnReceiver();
         context.registerReceiver(snReceiver, intentFilter);
     }
 
-    public void unRegisterReceiver(Context context) {
+    private void unRegisterReceiver(Context context) {
         if (null != snReceiver) {
             context.unregisterReceiver(snReceiver);
         }
@@ -485,15 +498,11 @@ public class BindPresenter extends BasePresenter<HomeView> {
         protected void onPostExecute(Boolean b) {
             super.onPostExecute(b);
             if (b) {
-                if (bindInfo.isB()) {
-                    bind(bindInfo.getT(), restart);
-                } else {
-                    reportWifiConnect();
-                }
+                if (bindInfo.isB()) bind(bindInfo.getT(), restart);
+                else reportWifiConnect();
             } else {
                 bindFail(new Exception("network is not available."), restart);
             }
         }
     }
-
 }
