@@ -23,25 +23,31 @@ import android.os.ParcelUuid;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.stockholm.bind.R;
+import com.stockholm.common.utils.DeviceUUIDFactory;
 
 import java.util.UUID;
 
 import javax.inject.Inject;
 
+
 public class BluetoothHelperForIOS {
 
     private static final String LOG_TAG = "BluetoothHelperForIOS";
+
+    private static final ParcelUuid BLE_UUID = ParcelUuid.fromString("00008912-0000-1000-8000-00805f9b34fb");
+    private static final String SERVICE_UUID = "1706BBC1-88AB-4B8D-877E-2237916EE929";
+    private static final UUID MESSAGE_CHARACTERISTIC_UUID = UUID.fromString("275348FC-C14D-4FD5-B434-7C3F351DEA5F");
+    private static final UUID DESCRIPTOR_MESSAGE_UUID = UUID.fromString("45bda094-ff40-4cb8-835d-0da8742bb1eb");
+    private static final UUID READ_CHARACTERISTIC_UUID = UUID.fromString("BD28E457-4026-4270-A99F-F9BC20182E15");
 
     private static final int MSG_CONNECT = 1;
     private static final int MSG_DISCONNECT = 2;
     private static final int MSG_MESSAGE = 3;
 
     private Context context;
-    private BluetoothManager mManager;
+    private DeviceUUIDFactory deviceUUIDFactory;
     private BluetoothGattServer mGattServer;
-    private BluetoothGattCharacteristic mCharacteristic;
-    private BluetoothGattService mService;
+    private BluetoothGattCharacteristic mMessageCharacteristic;
     private BluetoothLeAdvertiser mBLEAdvertiser;
 
     private BluetoothDevice mDevice;
@@ -99,7 +105,13 @@ public class BluetoothHelperForIOS {
         public void onDescriptorWriteRequest(BluetoothDevice device, int requestId, BluetoothGattDescriptor descriptor,
                                              boolean preparedWrite, boolean responseNeeded, int offset, byte[] value) {
             super.onDescriptorWriteRequest(device, requestId, descriptor, preparedWrite, responseNeeded, offset, value);
-            mGattServer.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, offset, value);
+            if (responseNeeded) {
+                mGattServer.sendResponse(device,
+                        requestId,
+                        BluetoothGatt.GATT_SUCCESS,
+                        offset,
+                        value);
+            }
         }
 
         @Override
@@ -114,7 +126,19 @@ public class BluetoothHelperForIOS {
         @Override
         public void onCharacteristicReadRequest(BluetoothDevice device, int requestId, int offset, BluetoothGattCharacteristic characteristic) {
             super.onCharacteristicReadRequest(device, requestId, offset, characteristic);
-            Log.d(LOG_TAG, "onCharacteristicReadRequest");
+            Log.i(LOG_TAG, "onCharacteristicReadRequest " + characteristic.getUuid().toString());
+            byte [] value;
+            if (READ_CHARACTERISTIC_UUID.equals(characteristic.getUuid())) {
+                value = deviceUUIDFactory.getDeviceId().getBytes();
+            } else {
+                value = new byte[0];
+            }
+
+            mGattServer.sendResponse(device,
+                    requestId,
+                    BluetoothGatt.GATT_SUCCESS,
+                    offset,
+                    value);
         }
     };
 
@@ -133,8 +157,10 @@ public class BluetoothHelperForIOS {
     };
 
     @Inject
-    public BluetoothHelperForIOS(Context context) {
+    public BluetoothHelperForIOS(Context context,
+                                 DeviceUUIDFactory deviceUUIDFactory) {
         this.context = context;
+        this.deviceUUIDFactory = deviceUUIDFactory;
     }
 
     public void init(Listener listener) {
@@ -149,73 +175,61 @@ public class BluetoothHelperForIOS {
             Log.e(LOG_TAG, "Bluetooth Low Energy Not Supported On Phone.");
             return false;
         }
-
         mBLEAdvertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
         if (mBLEAdvertiser == null) {
             Log.e(LOG_TAG, "Cannot Initialize BTLE Advertiser.");
             return false;
         }
-
-        // this will mention later about how to create gatt server
         return createGattService();
     }
 
     private Boolean createGattService() {
-        mManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
+        BluetoothManager mManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
         if (mManager == null) {
             Log.e(LOG_TAG, "Cannot Initialize Bluetooth Manager.");
             return false;
         }
-
         mGattServer = mManager.openGattServer(context, mGattServerCallback);
         if (mGattServer == null) {
             Log.e(LOG_TAG, "Cannot Create Gatt Server.");
             return false;
         }
-        // Setup service and characteristic.
         addDeviceService();
         return true;
     }
 
     private void addDeviceService() {
         // Remove previous Service
-        BluetoothGattService previousService = mGattServer.getService(UUID.fromString(context.getString(R.string.service_uuid)));
+        BluetoothGattService previousService = mGattServer.getService(UUID.fromString(SERVICE_UUID));
         if (previousService != null) {
             mGattServer.removeService(previousService);
         }
-
-        // Create new service and characteristics
-        mCharacteristic = new BluetoothGattCharacteristic(
-                UUID.fromString(context.getString(R.string.characteristic_uuid)),
-                BluetoothGattCharacteristic.PROPERTY_READ | BluetoothGattCharacteristic.PROPERTY_WRITE | BluetoothGattCharacteristic.PROPERTY_NOTIFY,
+        mMessageCharacteristic = new BluetoothGattCharacteristic(MESSAGE_CHARACTERISTIC_UUID,
+                //Read-write characteristic, supports notifications
+                BluetoothGattCharacteristic.PROPERTY_READ | BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE | BluetoothGattCharacteristic.PROPERTY_NOTIFY,
                 BluetoothGattCharacteristic.PERMISSION_READ | BluetoothGattCharacteristic.PERMISSION_WRITE);
-
-        BluetoothGattDescriptor myDescriptor = new BluetoothGattDescriptor(
-                UUID.fromString(context.getString(R.string.notify_descriptor_uuid)),
+        BluetoothGattDescriptor messageDesc = new BluetoothGattDescriptor(DESCRIPTOR_MESSAGE_UUID,
                 BluetoothGattDescriptor.PERMISSION_WRITE | BluetoothGattDescriptor.PERMISSION_READ);
-        mCharacteristic.addDescriptor(myDescriptor);
+        mMessageCharacteristic.addDescriptor(messageDesc);
 
-        mService = new BluetoothGattService(
-                UUID.fromString(context.getString(R.string.service_uuid)),
-                BluetoothGattService.SERVICE_TYPE_PRIMARY);
+        BluetoothGattCharacteristic mReadCharacteristic = new BluetoothGattCharacteristic(READ_CHARACTERISTIC_UUID, BluetoothGattCharacteristic.PROPERTY_READ, BluetoothGattCharacteristic.PERMISSION_READ);
 
-        mService.addCharacteristic(mCharacteristic);
-        mGattServer.addService(mService);
+        BluetoothGattService service = new BluetoothGattService(UUID.fromString(SERVICE_UUID), BluetoothGattService.SERVICE_TYPE_PRIMARY);
+        service.addCharacteristic(mMessageCharacteristic);
+        service.addCharacteristic(mReadCharacteristic);
+        mGattServer.addService(service);
     }
 
     private void startAdvertise() {
         AdvertiseSettings advSettings = new AdvertiseSettings.Builder()
-                .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
-                .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
+                .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_BALANCED)
+                .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
                 .setConnectable(true)
                 .build();
-
-        ParcelUuid deviceUUID = ParcelUuid.fromString(context.getString(R.string.ble_uuid));
         AdvertiseData advData = new AdvertiseData.Builder()
                 .setIncludeDeviceName(true)
-                .addServiceUuid(deviceUUID)
+                .addServiceUuid(BLE_UUID)
                 .build();
-
         if (advSettings == null || advData == null || mBLEAdvertiser == null) {
             Log.e(LOG_TAG, "Cannot create AdvertiseSettings or AdvertiseData");
             return;
@@ -231,8 +245,8 @@ public class BluetoothHelperForIOS {
         }
         if (!TextUtils.isEmpty(message)) {
             byte[] data = message.getBytes();
-            mCharacteristic.setValue(data);
-            mGattServer.notifyCharacteristicChanged(mDevice, mCharacteristic, false);
+            mMessageCharacteristic.setValue(data);
+            mGattServer.notifyCharacteristicChanged(mDevice, mMessageCharacteristic, false);
         }
     }
 
