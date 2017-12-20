@@ -36,7 +36,6 @@ import com.stockholm.common.JPushOrder;
 import com.stockholm.common.utils.DeviceUUIDFactory;
 import com.stockholm.common.utils.ProviderUtil;
 import com.stockholm.common.utils.StockholmLogger;
-import com.stockholm.common.utils.WeakHandler;
 import com.stockholm.common.view.BasePresenter;
 import com.wx.lib.Connector;
 import com.wx.lib.Ping;
@@ -70,14 +69,6 @@ public class BindPresenter extends BasePresenter<HomeView> {
     private boolean iosStartConnect = false;
     private long iosConnectTime = 0;
     private String pcbSN = DEFAULT_PCB_SN;
-    private WeakHandler weakHandler = new WeakHandler(msg -> {
-        if (msg.what == 0) {
-            String uuid = Constant.MSG_IOS_UUID + deviceUUIDFactory.getDeviceId();
-            System.out.println("--send uuid to mobile--" + uuid);
-            bluetoothHelperIOS.sendMessage(uuid);
-        }
-        return false;
-    });
 
     @Inject
     public BindPresenter(Context context, BindService bindService,
@@ -243,7 +234,6 @@ public class BindPresenter extends BasePresenter<HomeView> {
                     getMvpView().onUpdateView(HomeView.VIEW_CONNECT_NETWORK);
                     try {
                         iosStartConnect = true;
-                        weakHandler.sendEmptyMessageDelayed(0, 3000);
                         BindInfo bindInfo = BindInfo.toBindInfo(msg);
                         connectNetwork(bindInfo, false);
                     } catch (JsonSyntaxException e) {

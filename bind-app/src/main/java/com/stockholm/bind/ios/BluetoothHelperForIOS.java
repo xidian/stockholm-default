@@ -121,7 +121,6 @@ public class BluetoothHelperForIOS {
             String message = new String(value);
             Log.d(LOG_TAG, "onCharacteristicWriteRequest value:" + message);
             handler.obtainMessage(MSG_MESSAGE, message).sendToTarget();
-            sendMessage("response from device.");
         }
 
         @Override
