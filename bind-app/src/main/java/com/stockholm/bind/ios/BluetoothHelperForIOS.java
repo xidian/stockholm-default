@@ -34,7 +34,7 @@ public class BluetoothHelperForIOS {
 
     private static final String LOG_TAG = "BluetoothHelperForIOS";
 
-    private static final ParcelUuid BLE_UUID = ParcelUuid.fromString("00008913-0000-1000-8000-00805f9b34fb");
+    private static final ParcelUuid BLE_UUID = ParcelUuid.fromString("00008912-0000-1000-8000-00805f9b34fb");
     private static final String SERVICE_UUID = "1706BBC1-88AB-4B8D-877E-2237916EE929";
     private static final UUID MESSAGE_CHARACTERISTIC_UUID = UUID.fromString("275348FC-C14D-4FD5-B434-7C3F351DEA5F");
     private static final UUID DESCRIPTOR_MESSAGE_UUID = UUID.fromString("45bda094-ff40-4cb8-835d-0da8742bb1eb");
@@ -206,7 +206,7 @@ public class BluetoothHelperForIOS {
         }
         mMessageCharacteristic = new BluetoothGattCharacteristic(MESSAGE_CHARACTERISTIC_UUID,
                 //Read-write characteristic, supports notifications
-                BluetoothGattCharacteristic.PROPERTY_READ | BluetoothGattCharacteristic.PROPERTY_WRITE | BluetoothGattCharacteristic.PROPERTY_NOTIFY,
+                BluetoothGattCharacteristic.PROPERTY_READ | BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE | BluetoothGattCharacteristic.PROPERTY_NOTIFY,
                 BluetoothGattCharacteristic.PERMISSION_READ | BluetoothGattCharacteristic.PERMISSION_WRITE);
         BluetoothGattDescriptor messageDesc = new BluetoothGattDescriptor(DESCRIPTOR_MESSAGE_UUID,
                 BluetoothGattDescriptor.PERMISSION_WRITE | BluetoothGattDescriptor.PERMISSION_READ);

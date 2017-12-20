@@ -209,6 +209,7 @@ public class BindPresenter extends BasePresenter<HomeView> {
             @Override
             public void onConnected() {
                 StockholmLogger.d(TAG.BLE_IOS, "ios connect.");
+                if (iosStartConnect) return;
                 iosStartConnect = false;
                 connectType = Constant.CONNECT_TYPE_BLE_IOS;
                 getMvpView().onUpdateView(HomeView.VIEW_PAIR_SUCCESS);
