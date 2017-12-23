@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply from: '../config/quality.gradle'
 
-def version = "0.9"
+def version = "1.0"
 
 static def buildTime() {
     def date = new Date()
