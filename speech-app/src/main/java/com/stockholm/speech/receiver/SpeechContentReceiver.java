@@ -23,7 +23,7 @@ public class SpeechContentReceiver extends BroadcastReceiver {
             serviceIntent.putExtra(TTSConstant.TTS_CONTENT, content);
             serviceIntent.putExtra(TTSConstant.TTS_SPEAK_ID, speakId);
             context.startService(serviceIntent);
-        } else if (intent.getAction().equals("com.stockholm.ACTION_TTS_STOP")) {
+        } else if (intent.getAction().equals(SpeechAction.ACTION_TTS_STOP)) {
             SpeechSynthesizer.getInstance().stop();
         }
     }
