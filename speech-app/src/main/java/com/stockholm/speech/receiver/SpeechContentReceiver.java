@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.baidu.tts.client.SpeechSynthesizer;
 import com.stockholm.common.speech.SpeechAction;
 import com.stockholm.common.utils.StockholmLogger;
 import com.stockholm.speech.TTSConstant;
@@ -22,6 +23,8 @@ public class SpeechContentReceiver extends BroadcastReceiver {
             serviceIntent.putExtra(TTSConstant.TTS_CONTENT, content);
             serviceIntent.putExtra(TTSConstant.TTS_SPEAK_ID, speakId);
             context.startService(serviceIntent);
+        } else if (intent.getAction().equals("com.stockholm.ACTION_TTS_STOP")) {
+            SpeechSynthesizer.getInstance().stop();
         }
     }
 

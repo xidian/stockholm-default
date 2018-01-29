@@ -40,10 +40,12 @@
 
         <service android:name=".UploadService" />
 
-        <receiver android:name=".receiver.SpeechContentReceiver"
+        <receiver
+            android:name=".receiver.SpeechContentReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.stockholm.ACTION_TTS_SPEAK" />
+                <action android:name="com.stockholm.ACTION_TTS_STOP" />
             </intent-filter>
         </receiver>
 
