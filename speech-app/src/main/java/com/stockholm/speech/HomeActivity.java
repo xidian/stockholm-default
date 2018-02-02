@@ -27,4 +27,9 @@ public class HomeActivity extends ReleaseBaseActivity {
         finish();
     }
 
+    @Override
+    protected void pauseSound() {
+
+    }
+
 }

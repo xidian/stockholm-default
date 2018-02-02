@@ -90,6 +90,11 @@ public class HomeActivity extends ReleaseBaseActivity implements HomeView {
     }
 
     @Override
+    protected void pauseSound() {
+
+    }
+
+    @Override
     public void onConnectWifiButtonClick() {
         Log.d(TAG, "connect wifi button click.");
         clickCombination = true;
