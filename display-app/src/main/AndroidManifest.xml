@@ -47,8 +47,8 @@
             android:name=".receiver.DisplayStateReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="action.stockholm.SHOW_MEDIA" />
-                <action android:name="action.stockholm.DISMISS_MEDIA" />
+                <action android:name="action.stockholm.status.show" />
+                <action android:name="action.stockholm.status.dismis" />
                 <action android:name="com.stockholm.ACTION_DISMISS_AUTO_DISPLAY" />
             </intent-filter>
         </receiver>

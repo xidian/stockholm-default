@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.stockholm.common.IntentExtraKey;
-import com.stockholm.common.statusbar.StatusAction;
+import com.stockholm.common.statusbar.StatusConstant;
 import com.stockholm.common.utils.PreferenceFactory;
 import com.stockholm.common.utils.StockholmLogger;
 import com.stockholm.display.DisplayApplication;
@@ -35,13 +35,13 @@ public class DisplayStateReceiver extends BroadcastReceiver {
         DisplayPreference preference = preferenceFactory.create(DisplayPreference.class);
         String action = intent.getAction();
         StockholmLogger.d("DisplayStateReceiver", "onReceive: " + action);
-        if (IntentExtraKey.ACTION_DISMISS_AUTO_DISPLAY.equals(action) || StatusAction.ACTION_STATUS_SHOW_MEDIA.equals(action)) {
-            if (StatusAction.ACTION_STATUS_SHOW_MEDIA.equals(action)) {
+        if (IntentExtraKey.ACTION_DISMISS_AUTO_DISPLAY.equals(action) || StatusConstant.ACTION_STATUS_SHOW.equals(action)) {
+            if (StatusConstant.ACTION_STATUS_SHOW.equals(action)) {
                 preference.mediaPlaying(true);
             }
             displayHelper.dismissWindow();
             startCountDown();
-        } else if (StatusAction.ACTION_STATUS_DISMISS_MEDIA.equals(action)) {
+        } else if (StatusConstant.ACTION_STATUS_DISMISS.equals(action)) {
             preference.mediaPlaying(false);
         }
     }

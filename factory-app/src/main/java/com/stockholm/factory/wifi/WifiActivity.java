@@ -57,6 +57,11 @@ public class WifiActivity extends ReleaseBaseActivity implements WifiView {
     }
 
     @Override
+    protected void pauseSound() {
+
+    }
+
+    @Override
     public void onTestFinish(boolean pass) {
         runOnUiThread(() -> {
             Tips tips = new Tips(this);

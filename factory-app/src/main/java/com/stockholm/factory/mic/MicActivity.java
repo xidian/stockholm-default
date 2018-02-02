@@ -52,6 +52,11 @@ public class MicActivity extends ReleaseBaseActivity implements MicView {
     }
 
     @Override
+    protected void pauseSound() {
+
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         presenter.attachView(this);

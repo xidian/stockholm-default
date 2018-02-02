@@ -48,6 +48,11 @@ public class HomeActivity extends ReleaseBaseActivity implements HomeView {
     }
 
     @Override
+    protected void pauseSound() {
+
+    }
+
+    @Override
     public void getDataSuccess(List<DisplayBean> data) {
         isLoading = false;
         adapter.setNewData(data);

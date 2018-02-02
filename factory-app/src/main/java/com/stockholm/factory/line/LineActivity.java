@@ -79,6 +79,11 @@ public class LineActivity extends ReleaseBaseActivity implements LineView {
     }
 
     @Override
+    protected void pauseSound() {
+
+    }
+
+    @Override
     public void onControlUpClick() {
         if (fail) return;
         presenter.onControlUpClick();

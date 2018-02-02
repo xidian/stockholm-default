@@ -66,6 +66,11 @@ public class ScreenActivity extends ReleaseBaseActivity {
     }
 
     @Override
+    protected void pauseSound() {
+
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         index = 0;

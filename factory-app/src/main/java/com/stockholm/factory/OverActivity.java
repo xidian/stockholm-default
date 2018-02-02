@@ -36,6 +36,11 @@ public class OverActivity extends ReleaseBaseActivity {
     }
 
     @Override
+    protected void pauseSound() {
+
+    }
+
+    @Override
     public void onLineShortDrag() {
 
     }

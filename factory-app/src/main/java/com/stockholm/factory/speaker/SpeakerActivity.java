@@ -61,6 +61,11 @@ public class SpeakerActivity extends ReleaseBaseActivity implements SpeakerView 
     }
 
     @Override
+    protected void pauseSound() {
+
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         presenter.release();

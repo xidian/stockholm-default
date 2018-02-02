@@ -37,6 +37,11 @@ public class HomeActivity extends ReleaseBaseActivity {
         finish();
     }
 
+    @Override
+    protected void pauseSound() {
+
+    }
+
     private void syncConfig() {
         Intent broadcastIntent = new Intent();
         broadcastIntent.setAction(Constant.ACTION_PUSH_BROADCAST);

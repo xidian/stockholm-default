@@ -31,6 +31,11 @@ public class HomeActivity extends ReleaseBaseActivity {
     }
 
     @Override
+    protected void pauseSound() {
+
+    }
+
+    @Override
     public void onControlDownClick() {
         super.onControlDownClick();
         pathUtils.goNext(this);

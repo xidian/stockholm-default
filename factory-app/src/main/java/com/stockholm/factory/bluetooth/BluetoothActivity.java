@@ -55,6 +55,11 @@ public class BluetoothActivity extends ReleaseBaseActivity implements BluetoothV
     }
 
     @Override
+    protected void pauseSound() {
+
+    }
+
+    @Override
     public void onBluetoothFound(MeowBluetoothDevice device) {
         adapter.add(device);
         recyclerView.scrollToPosition(adapter.getItemCount() - 1);

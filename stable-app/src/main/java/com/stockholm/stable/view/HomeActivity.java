@@ -37,6 +37,11 @@ public class HomeActivity extends ReleaseBaseActivity implements HomeView {
     }
 
     @Override
+    protected void pauseSound() {
+
+    }
+
+    @Override
     public void flashImage(int picId) {
         ivTestImage.setImageDrawable(getDrawable(picId));
     }

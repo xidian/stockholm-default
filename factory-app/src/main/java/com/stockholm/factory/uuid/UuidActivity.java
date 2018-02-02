@@ -67,6 +67,11 @@ public class UuidActivity extends ReleaseBaseActivity implements UuidView {
     }
 
     @Override
+    protected void pauseSound() {
+
+    }
+
+    @Override
     public void onLineShortDrag() {
 //        pathUtils.goOver(this);
         logUtils.write(LogUtils.UUID, LogUtils.FAIL);

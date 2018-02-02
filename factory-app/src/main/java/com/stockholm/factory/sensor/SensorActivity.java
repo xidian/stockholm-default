@@ -54,6 +54,11 @@ public class SensorActivity extends ReleaseBaseActivity implements SensorView {
     }
 
     @Override
+    protected void pauseSound() {
+
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         presenter.release();
