@@ -1,6 +1,7 @@
 package com.stockholm.fota.engine;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 
 import com.adups.iot_libs.OtaAgentPolicy;
@@ -9,6 +10,7 @@ import com.adups.iot_libs.info.VersionInfo;
 import com.adups.iot_libs.inter.ICheckVersionCallback;
 import com.adups.iot_libs.inter.IDownloadListener;
 import com.adups.iot_libs.utils.SPFTool;
+import com.stockholm.common.IntentExtraKey;
 import com.stockholm.common.utils.StockholmLogger;
 import com.stockholm.fota.policy.PolicyManager;
 
@@ -126,6 +128,10 @@ public final class UpdateEngine {
         }
 
         private void download() {
+            Intent intent = new Intent();
+            intent.setAction(IntentExtraKey.ACTION_SHOW_OTA_VIEW);
+            intent.setAction(IntentExtraKey.ACTION_DISMISS_AUTO_DISPLAY);
+            context.sendBroadcast(intent);
             OtaAgentPolicy.download(new IDownloadListener() {
                 @Override
                 public void onPrepare() {
@@ -138,6 +144,9 @@ public final class UpdateEngine {
 
                 @Override
                 public void onFailed(int i) {
+                    Intent intent = new Intent();
+                    intent.setAction(IntentExtraKey.ACTION_CLEAR_OTA_VIEW);
+                    context.sendBroadcast(intent);
                     StockholmLogger.d(TAG, "fota download on error,error info: " + Error.getErrorMessage(i));
                     lockNotify();
                 }

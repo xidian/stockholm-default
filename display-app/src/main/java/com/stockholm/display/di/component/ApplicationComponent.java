@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.stockholm.api.display.DisplayService;
 import com.stockholm.common.bus.RxEventBus;
+import com.stockholm.common.ota.OtaViewManager;
 import com.stockholm.common.utils.PreferenceFactory;
 import com.stockholm.common.utils.WeakHandler;
 import com.stockholm.display.DisplayApplication;
@@ -32,4 +33,5 @@ public interface ApplicationComponent {
 
     DisplayHelper displayHelper();
 
+    OtaViewManager otaViewManager();
 }

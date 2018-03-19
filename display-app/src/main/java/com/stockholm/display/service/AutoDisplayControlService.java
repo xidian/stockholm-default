@@ -6,6 +6,7 @@ import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
+import com.stockholm.common.ota.OtaViewManager;
 import com.stockholm.common.utils.PreferenceFactory;
 import com.stockholm.common.utils.StockholmLogger;
 import com.stockholm.display.DisplayApplication;
@@ -27,6 +28,8 @@ public class AutoDisplayControlService extends Service {
     DisplayHelper displayHelper;
     @Inject
     PreferenceFactory preferenceFactory;
+    @Inject
+    OtaViewManager otaViewManager;
 
     private CountDownTimer countDownTimer;
     private DisplayPreference preference;
@@ -62,7 +65,7 @@ public class AutoDisplayControlService extends Service {
                 public void onFinish() {
                     boolean openAutoDisplay = preference.isOpenAutoDisplay();
                     boolean hasMediaPlaying = preference.hasMediaPlaying();
-                    if (openAutoDisplay && !hasMediaPlaying) {
+                    if (openAutoDisplay && !hasMediaPlaying && !otaViewManager.isShowing()) {
                         displayHelper.showWindow();
                         StockholmLogger.d(TAG, "1 min after show auto display");
                     }
