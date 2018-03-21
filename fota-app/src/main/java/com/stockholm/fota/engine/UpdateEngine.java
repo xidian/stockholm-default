@@ -128,10 +128,13 @@ public final class UpdateEngine {
         }
 
         private void download() {
-            Intent intent = new Intent();
-            intent.setAction(IntentExtraKey.ACTION_SHOW_OTA_VIEW);
-            intent.setAction(IntentExtraKey.ACTION_DISMISS_AUTO_DISPLAY);
-            context.sendBroadcast(intent);
+            StockholmLogger.d(TAG, "fota send ota view broadcast ");
+            Intent intent1 = new Intent();
+            intent1.setAction(IntentExtraKey.ACTION_SHOW_OTA_VIEW);
+            context.sendBroadcast(intent1);
+            Intent intent2 = new Intent();
+            intent2.setAction(IntentExtraKey.ACTION_DISMISS_AUTO_DISPLAY);
+            context.sendBroadcast(intent2);
             OtaAgentPolicy.download(new IDownloadListener() {
                 @Override
                 public void onPrepare() {
